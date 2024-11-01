@@ -9,8 +9,8 @@ import {
 } from "../../components/ui/dropdown-menu";
 import { Settings, LogOut } from "lucide-react";
 import CryptoJS from 'crypto-js';
-import { apiService } from '../../services/api';
-import { useToast } from "../../hooks/use-toast";
+import { apiService } from '@/services/api';
+import { useToast } from "@/hooks/use-toast";
 
 interface UserData {
   name: string;

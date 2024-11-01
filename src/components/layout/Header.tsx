@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import UserProfileWidget from './UserProfileWidget';
-import { isAuthenticated } from '../../utils/auth';
+import { isAuthenticated } from '@/utils/auth';
 
 const Header = () => {
   const isUserAuthenticated = isAuthenticated();

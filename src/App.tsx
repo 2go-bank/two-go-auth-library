@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { store } from './store/store';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
-import { Toaster } from './components/ui/toaster';
+import { Toaster } from '@/components/ui';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 
 // Lazy load components
