@@ -37,7 +37,7 @@ const Login = () => {
         const data = await response.json();
         const encryptedData = encryptData(JSON.stringify(data));
         localStorage.setItem('2go-auth', encryptedData);
-        navigate('/home');
+        navigate('/app');  // Changed from '/home' to '/app' to match the route structure
       } else if (response.status === 401) {
         toast({
           variant: "destructive",
