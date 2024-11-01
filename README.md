@@ -1,71 +1,68 @@
-# Welcome to your GPT Engineer project
+# 2GO Base Auth
 
-## Project info
+Este pacote contém os componentes base de autenticação e layout do 2GO Bank.
 
-**URL**: https://run.gptengineer.app/projects/9b59d321-a439-46e2-8b0d-aeef5f169eeb/improve
+## Pré-requisitos
+### Estado Global:
+- Utilize redux toolkit para gerenciar o estado global da aplicação
 
-## How can I edit this code?
+### Teste de Componentes: 
+- Implemente testes de unidade e integração utilizando Jest e React Testing Library
+- gere uma página stats no projeto com a mostra de toda a cobertura de teste
 
-There are several ways of editing your application.
+### Performance:
+- Divida o código com React.lazy e React Suspense para carregar módulos sob demanda
+- Exiba validações em tempo real no formulário com mensagens claras
 
-**Use GPT Engineer**
+### Responsividade:
+- Use Tailwind para criar layouts fluídos, adaptando-se a diferentes dispositivos
+- fique perfeitamente utilizável em dispositivos mobile 
 
-Simply visit the GPT Engineer project at [GPT Engineer](https://gptengineer.app/projects/9b59d321-a439-46e2-8b0d-aeef5f169eeb/improve) and start prompting.
+### Acessibilidade (a11y):
+- Utilize o shadcn/ui para componentes que já seguem padrões de acessibilidade
+- Use atributos ARIA e garanta navegação por teclado
 
-Changes made via gptengineer.app will be committed automatically to this repo.
+### Cores predominantes:
+- Preto: #000000
+- Amarelo: #EFB207
+- Branco: #FFFFFF
 
-**Use your preferred IDE**
+### Design:
+- Utilizar style guides de acordo com: https://m3.material.io/get-started
+- Header sempre preto com fontes em amarelo
+- Logotipo sempre no lado esquerdo do header
+- Footer sempre preto com fontes em amarelo
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in the GPT Engineer UI.
+### Números:
+- Utilizar numeros no padrão brasileiro
+- Utilizar 6 casas decimais quando for cripto
+- Utilizar 2 casas decimais quando for moeda corrente
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## Instalação
 
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```bash
+npm install @2go/base-auth
+# ou
+yarn add @2go/base-auth
 ```
 
-**Edit a file directly in GitHub**
+## Configuração
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+1. Crie um arquivo `.env` na raiz do seu projeto:
 
-**Use GitHub Codespaces**
+```env
+VITE_AUTH_API_URL=https://api.2gopag.com/access/auth
+VITE_API_BASE_URL=https://api.2gopag.com
+VITE_ENVIRONMENT=production
+VITE_LOGO_URL=https://2gobank.com.br/wp-content/uploads/2023/05/logo-2go-bank.png
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+2. Instale as dependências necessárias:
 
-## What technologies are used for this project?
+```bash
+npm install @reduxjs/toolkit react-redux react-router-dom @tanstack/react-query crypto-js tailwindcss
+```
 
-This project is built with .
+## Licença
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-All GPT Engineer projects can be deployed directly via the GPT Engineer app.
-
-Simply visit your project at [GPT Engineer](https://gptengineer.app/projects/9b59d321-a439-46e2-8b0d-aeef5f169eeb/improve) and click on Share -> Publish.
-
-## I want to use a custom domain - is that possible?
-
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.gptengineer.app/tips-tricks/custom-domain/)
+Este projeto é privado e proprietário do 2GO Bank.

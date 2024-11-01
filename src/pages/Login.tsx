@@ -1,0 +1,140 @@
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
+import CryptoJS from 'crypto-js';
+import { Eye, EyeOff } from "lucide-react";
+
+const Login = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
+  const navigate = useNavigate();
+
+  const encryptData = (data: string) => {
+    const secretKey = '2go-secret-key';
+    return CryptoJS.AES.encrypt(data, secretKey).toString();
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    const payload = {
+      username,
+      password,
+      client_id: '2go-api',
+      grant_type: 'password'
+    };
+
+    try {
+      const response = await fetch(import.meta.env.VITE_AUTH_API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (response.status === 200) {
+        const data = await response.json();
+        const encryptedData = encryptData(JSON.stringify(data));
+        localStorage.setItem('2go-auth', encryptedData);
+        navigate('/home');
+      } else if (response.status === 401) {
+        toast({
+          variant: "destructive",
+          title: "Usuário ou senha incorretos",
+          className: "bg-red-600 text-white border-none"
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Houve um erro ao se comunicar com a 2GO. Por favor entre em contato com nosso atendimento",
+          className: "bg-red-600 text-white border-none"
+        });
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Houve um erro ao se comunicar com a 2GO. Por favor entre em contato com nosso atendimento",
+        className: "bg-red-600 text-white border-none"
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="container mx-auto flex flex-col items-center justify-center min-h-[calc(100vh-200px)]">
+      <div className="w-full max-w-md space-y-8 p-8 bg-black rounded-lg shadow-lg">
+        <div className="flex justify-center mb-8">
+          <img 
+            src={import.meta.env.VITE_LOGO_URL}
+            alt="2GO Bank Logo" 
+            className="h-12"
+          />
+        </div>
+        
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-2">
+            <Label htmlFor="username" className="text-[#EFB207]">Usuário</Label>
+            <Input
+              id="username"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+              className="bg-white/10 border-gray-700 text-white placeholder:text-gray-400"
+              disabled={isLoading}
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="password" className="text-[#EFB207]">Senha</Label>
+            <div className="relative">
+              <Input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="bg-white/10 border-gray-700 text-white placeholder:text-gray-400 pr-10"
+                disabled={isLoading}
+              />
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="absolute right-0 top-0 h-full px-3 text-gray-400 hover:text-white"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </Button>
+            </div>
+          </div>
+
+          <Button 
+            type="submit" 
+            className="w-full bg-[#EFB207] hover:bg-[#EFB207]/90"
+            disabled={isLoading}
+          >
+            {isLoading ? 'Entrando...' : 'Entrar'}
+          </Button>
+        </form>
+
+        <div className="text-center mt-4">
+          <Link to="/forgot-password" className="text-[#EFB207] hover:underline">
+            Esqueci minha senha
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Login;
