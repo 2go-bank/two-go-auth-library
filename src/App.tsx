@@ -7,7 +7,6 @@ import Footer from './components/layout/Footer';
 import { Toaster } from '@/components/ui';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 
-// Lazy load components
 const Login = React.lazy(() => import('./pages/Login'));
 const ForgotPassword = React.lazy(() => import('./pages/ForgotPassword'));
 const ValidateOTP = React.lazy(() => import('./pages/ValidateOTP'));
@@ -26,59 +25,35 @@ const LoadingSpinner = () => (
 );
 
 const AuthLayout = () => (
-  <>
-    <div className="min-h-screen flex flex-col bg-white">
-      <main className="flex-grow container mx-auto px-4 py-8">
-        <Suspense fallback={<LoadingSpinner />}>
-          <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/validate-otp" element={<ValidateOTP />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
-          </Routes>
-        </Suspense>
-      </main>
-    </div>
-  </>
+  <div className="min-h-screen flex flex-col bg-white">
+    <main className="flex-grow container mx-auto px-4 py-8">
+      <Suspense fallback={<LoadingSpinner />}>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/validate-otp" element={<ValidateOTP />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+        </Routes>
+      </Suspense>
+    </main>
+  </div>
 );
 
 const MainLayout = () => (
-  <>
-    <div className="min-h-screen flex flex-col bg-white">
-      <Header />
-      <main className="flex-grow container mx-auto px-4 py-8">
-        <Suspense fallback={<LoadingSpinner />}>
-          <Routes>
-            <Route 
-              path="/home" 
-              element={
-                <ProtectedRoute>
-                  <Home />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/stats" 
-              element={
-                <ProtectedRoute>
-                  <Stats />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/settings" 
-              element={
-                <ProtectedRoute>
-                  <Settings />
-                </ProtectedRoute>
-              } 
-            />
-          </Routes>
-        </Suspense>
-      </main>
-      <Footer />
-    </div>
-  </>
+  <div className="min-h-screen flex flex-col bg-white">
+    <Header />
+    <main className="flex-grow container mx-auto px-4 py-8">
+      <Suspense fallback={<LoadingSpinner />}>
+        <Routes>
+          <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+          <Route path="/stats" element={<ProtectedRoute><Stats /></ProtectedRoute>} />
+          <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+        </Routes>
+      </Suspense>
+    </main>
+    <Footer />
+  </div>
 );
 
 const App = () => {
@@ -87,9 +62,9 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/*" element={<AuthLayout />} />
-          <Route path="/home" element={<MainLayout />} />
-          <Route path="/stats" element={<MainLayout />} />
-          <Route path="/settings" element={<MainLayout />} />
+          <Route path="/home/*" element={<MainLayout />} />
+          <Route path="/stats/*" element={<MainLayout />} />
+          <Route path="/settings/*" element={<MainLayout />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
         <Toaster />
