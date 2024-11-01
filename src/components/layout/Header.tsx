@@ -8,7 +8,7 @@ const Header = () => {
   return (
     <header className="bg-black w-full py-4 px-6">
       <div className="container mx-auto flex justify-between items-center">
-        <Link to="/home" className="flex items-center">
+        <Link to="/app" className="flex items-center">
           <img 
             src={import.meta.env.VITE_LOGO_URL}
             alt="2GO Bank Logo" 
@@ -21,12 +21,12 @@ const Header = () => {
               {isUserAuthenticated ? (
                 <>
                   <li>
-                    <Link to="/home" className="text-[#EFB207] hover:text-[#EFB207]/80 transition-colors">
+                    <Link to="/app" className="text-[#EFB207] hover:text-[#EFB207]/80 transition-colors">
                       Home
                     </Link>
                   </li>
                   <li>
-                    <Link to="/stats" className="text-[#EFB207] hover:text-[#EFB207]/80 transition-colors">
+                    <Link to="/app/stats" className="text-[#EFB207] hover:text-[#EFB207]/80 transition-colors">
                       Stats
                     </Link>
                   </li>
