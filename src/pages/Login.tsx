@@ -1,16 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import LoginForm from '@/components/auth/LoginForm';
 import CryptoJS from 'crypto-js';
-import { Eye, EyeOff } from "lucide-react";
 
 const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -20,8 +14,7 @@ const Login = () => {
     return CryptoJS.AES.encrypt(data, secretKey).toString();
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleLogin = async (username: string, password: string) => {
     setIsLoading(true);
 
     const payload = {
@@ -80,52 +73,7 @@ const Login = () => {
           />
         </div>
         
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-2">
-            <Label htmlFor="username" className="text-[#EFB207]">Usuário</Label>
-            <Input
-              id="username"
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-              className="bg-white/10 border-gray-700 text-white placeholder:text-gray-400"
-              disabled={isLoading}
-            />
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="password" className="text-[#EFB207]">Senha</Label>
-            <div className="relative">
-              <Input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="bg-white/10 border-gray-700 text-white placeholder:text-gray-400 pr-10"
-                disabled={isLoading}
-              />
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="absolute right-0 top-0 h-full px-3 text-gray-400 hover:text-white"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-              </Button>
-            </div>
-          </div>
-
-          <Button 
-            type="submit" 
-            className="w-full bg-[#EFB207] hover:bg-[#EFB207]/90"
-            disabled={isLoading}
-          >
-            {isLoading ? 'Entrando...' : 'Entrar'}
-          </Button>
-        </form>
+        <LoginForm onSubmit={handleLogin} isLoading={isLoading} />
 
         <div className="text-center mt-4">
           <Link to="/forgot-password" className="text-[#EFB207] hover:underline">
