@@ -1,20 +1,20 @@
 import React, { Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { store } from './store/store.ts';
-import Header from './components/layout/Header.tsx';
-import Footer from './components/layout/Footer.tsx';
-import { Toaster } from './components/ui/toaster.tsx';
-import ProtectedRoute from './components/auth/ProtectedRoute.tsx';
+import { store } from './store/store';
+import Header from './components/layout/Header';
+import Footer from './components/layout/Footer';
+import { Toaster } from './components/ui/toaster';
+import ProtectedRoute from './components/auth/ProtectedRoute';
 
 // Lazy load components
-const Login = React.lazy(() => import('./pages/Login.tsx'));
-const ForgotPassword = React.lazy(() => import('./pages/ForgotPassword.tsx'));
-const ValidateOTP = React.lazy(() => import('./pages/ValidateOTP.tsx'));
-const ResetPassword = React.lazy(() => import('./pages/ResetPassword.tsx'));
-const Stats = React.lazy(() => import('./pages/Stats.tsx'));
-const Settings = React.lazy(() => import('./pages/Settings.tsx'));
-const Home = React.lazy(() => import('./pages/Home.tsx'));
+const Login = React.lazy(() => import('./pages/Login'));
+const ForgotPassword = React.lazy(() => import('./pages/ForgotPassword'));
+const ValidateOTP = React.lazy(() => import('./pages/ValidateOTP'));
+const ResetPassword = React.lazy(() => import('./pages/ResetPassword'));
+const Stats = React.lazy(() => import('./pages/Stats'));
+const Settings = React.lazy(() => import('./pages/Settings'));
+const Home = React.lazy(() => import('./pages/Home'));
 
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center w-full h-screen">
@@ -35,7 +35,6 @@ const App = () => {
             <Suspense fallback={<LoadingSpinner />}>
               <Routes>
                 <Route path="/" element={<Login />} />
-                <Route path="/login" element={<Login />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/validate-otp" element={<ValidateOTP />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
