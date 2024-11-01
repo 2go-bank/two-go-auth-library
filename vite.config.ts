@@ -2,17 +2,24 @@ import {defineConfig} from 'vite'
 import react from '@vitejs/plugin-react'
 import dts from 'vite-plugin-dts'
 import {resolve} from 'path'
+import {componentTagger} from "lovable-tagger";
 
-export default defineConfig({
+
+export default defineConfig(({mode}) => ({
+    server: {
+        host: "::",
+        port: 8080,
+    },
     plugins: [
         react(),
+        mode === 'development' && componentTagger(),
         dts({
             insertTypesEntry: true,
         }),
     ],
     resolve: {
         alias: {
-            '@': resolve(__dirname, 'src')
+            '@': resolve(__dirname, './src')
         }
     },
     build: {
@@ -34,4 +41,4 @@ export default defineConfig({
             },
         },
     },
-})
+}));
