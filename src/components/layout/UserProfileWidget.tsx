@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar.tsx";
+import { Avatar, AvatarImage, AvatarFallback } from "../../components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu.tsx";
+} from "../../components/ui/dropdown-menu";
 import { Settings, LogOut } from "lucide-react";
 import CryptoJS from 'crypto-js';
-import { apiService } from '@/services/api.ts';
-import { useToast } from "@/hooks/use-toast.ts";
+import { apiService } from '../../services/api';
+import { useToast } from "../../hooks/use-toast";
 
 interface UserData {
   name: string;
