@@ -57,9 +57,12 @@ const MainLayout = () => (
 );
 
 const App = () => {
+  const isPreview = window.location.hostname.includes('preview--');
+  const basename = isPreview ? '/preview' : '/';
+
   return (
     <Provider store={store}>
-      <BrowserRouter basename="/preview">
+      <BrowserRouter basename={basename}>
         <Routes>
           <Route path="/" element={<AuthLayout />}>
             <Route index element={<Login />} />
