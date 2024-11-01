@@ -27,7 +27,7 @@ const LoadingSpinner = () => (
 
 const AuthLayout = () => (
   <>
-    <div className="min-h-screen flex flex-col bg-black text-white">
+    <div className="min-h-screen flex flex-col bg-white">
       <main className="flex-grow container mx-auto px-4 py-8">
         <Suspense fallback={<LoadingSpinner />}>
           <Routes>
@@ -44,7 +44,7 @@ const AuthLayout = () => (
 
 const MainLayout = () => (
   <>
-    <div className="min-h-screen flex flex-col bg-black text-white">
+    <div className="min-h-screen flex flex-col bg-white">
       <Header />
       <main className="flex-grow container mx-auto px-4 py-8">
         <Suspense fallback={<LoadingSpinner />}>
@@ -87,9 +87,9 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/*" element={<AuthLayout />} />
-          <Route path="/home/*" element={<MainLayout />} />
-          <Route path="/stats/*" element={<MainLayout />} />
-          <Route path="/settings/*" element={<MainLayout />} />
+          <Route path="/home" element={<MainLayout />} />
+          <Route path="/stats" element={<MainLayout />} />
+          <Route path="/settings" element={<MainLayout />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
         <Toaster />
