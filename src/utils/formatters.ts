@@ -2,12 +2,19 @@ export const formatCurrency = (value: number): string => {
   return new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
   }).format(value);
 };
 
-export const formatCrypto = (value: number): string => {
+export const formatNumber = (value: number): string => {
+  return new Intl.NumberFormat('pt-BR').format(value);
+};
+
+export const formatPercentage = (value: number): string => {
   return new Intl.NumberFormat('pt-BR', {
-    minimumFractionDigits: 6,
-    maximumFractionDigits: 6,
-  }).format(value);
+    style: 'percent',
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1
+  }).format(value / 100);
 };
