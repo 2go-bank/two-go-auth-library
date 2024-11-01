@@ -19,8 +19,19 @@ export const isAuthenticated = () => {
     const payload = JSON.parse(atob(authData.access_token.split('.')[1])) as JWTPayload;
     
     // Check if token is expired
-    return payload.exp * 1000 > Date.now();
+    const isValid = payload.exp * 1000 > Date.now();
+    
+    // Se o token não for válido, limpa o localStorage
+    if (!isValid) {
+      localStorage.removeItem('2go-auth');
+      localStorage.removeItem('2go-user');
+    }
+    
+    return isValid;
   } catch {
+    // Em caso de erro na decodificação, limpa o localStorage
+    localStorage.removeItem('2go-auth');
+    localStorage.removeItem('2go-user');
     return false;
   }
 };

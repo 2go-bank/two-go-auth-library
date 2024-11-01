@@ -7,9 +7,11 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const location = useLocation();
+  const authenticated = isAuthenticated();
   
-  if (!isAuthenticated()) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
+  if (!authenticated) {
+    // Redireciona para o login mantendo a rota original como state
+    return <Navigate to="/login" state={{ from: location.pathname }} replace />;
   }
 
   return <>{children}</>;
