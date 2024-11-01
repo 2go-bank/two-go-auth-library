@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import path from 'path'
 import dts from 'vite-plugin-dts'
+import { resolve } from 'path'
 
 export default defineConfig({
     plugins: [
@@ -10,18 +10,15 @@ export default defineConfig({
             insertTypesEntry: true,
         }),
     ],
-    resolve: {
-        alias: {
-            '@': path.resolve(__dirname, './src'),
-        },
-    },
     build: {
         lib: {
-            entry: path.resolve(__dirname, 'src/index.ts'),
+            entry: resolve(__dirname, 'src/index.ts'),
             name: '2goBaseAuth',
             formats: ['es', 'umd'],
             fileName: (format) => `2go-base-auth.${format}.js`,
         },
+        outDir: 'dist',
+        emptyOutDir: true,
         rollupOptions: {
             external: ['react', 'react-dom'],
             output: {
