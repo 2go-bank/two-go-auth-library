@@ -25,50 +25,74 @@ const LoadingSpinner = () => (
   </div>
 );
 
+const AuthLayout = () => (
+  <>
+    <div className="min-h-screen flex flex-col bg-black text-white">
+      <main className="flex-grow container mx-auto px-4 py-8">
+        <Suspense fallback={<LoadingSpinner />}>
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/validate-otp" element={<ValidateOTP />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+          </Routes>
+        </Suspense>
+      </main>
+    </div>
+  </>
+);
+
+const MainLayout = () => (
+  <>
+    <div className="min-h-screen flex flex-col bg-black text-white">
+      <Header />
+      <main className="flex-grow container mx-auto px-4 py-8">
+        <Suspense fallback={<LoadingSpinner />}>
+          <Routes>
+            <Route 
+              path="/home" 
+              element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/stats" 
+              element={
+                <ProtectedRoute>
+                  <Stats />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/settings" 
+              element={
+                <ProtectedRoute>
+                  <Settings />
+                </ProtectedRoute>
+              } 
+            />
+          </Routes>
+        </Suspense>
+      </main>
+      <Footer />
+    </div>
+  </>
+);
+
 const App = () => {
   return (
     <Provider store={store}>
       <BrowserRouter>
-        <div className="min-h-screen flex flex-col bg-black text-white">
-          <Header />
-          <main className="flex-grow container mx-auto px-4 py-8">
-            <Suspense fallback={<LoadingSpinner />}>
-              <Routes>
-                <Route path="/" element={<Login />} />
-                <Route path="/forgot-password" element={<ForgotPassword />} />
-                <Route path="/validate-otp" element={<ValidateOTP />} />
-                <Route path="/reset-password" element={<ResetPassword />} />
-                <Route 
-                  path="/home" 
-                  element={
-                    <ProtectedRoute>
-                      <Home />
-                    </ProtectedRoute>
-                  } 
-                />
-                <Route 
-                  path="/stats" 
-                  element={
-                    <ProtectedRoute>
-                      <Stats />
-                    </ProtectedRoute>
-                  } 
-                />
-                <Route 
-                  path="/settings" 
-                  element={
-                    <ProtectedRoute>
-                      <Settings />
-                    </ProtectedRoute>
-                  } 
-                />
-                <Route path="*" element={<Navigate to="/" replace />} />
-              </Routes>
-            </Suspense>
-          </main>
-          <Footer />
-          <Toaster />
-        </div>
+        <Routes>
+          <Route path="/*" element={<AuthLayout />} />
+          <Route path="/home/*" element={<MainLayout />} />
+          <Route path="/stats/*" element={<MainLayout />} />
+          <Route path="/settings/*" element={<MainLayout />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+        <Toaster />
       </BrowserRouter>
     </Provider>
   );
