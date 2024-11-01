@@ -29,12 +29,12 @@ const App = () => {
   return (
     <Provider store={store}>
       <BrowserRouter>
-        <div className="min-h-screen flex flex-col">
+        <div className="min-h-screen flex flex-col bg-black text-white">
           <Header />
-          <main className="flex-grow">
+          <main className="flex-grow container mx-auto px-4 py-8">
             <Suspense fallback={<LoadingSpinner />}>
               <Routes>
-                <Route path="/" element={<Navigate to="/login" replace />} />
+                <Route path="/" element={<Login />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/validate-otp" element={<ValidateOTP />} />
@@ -63,6 +63,7 @@ const App = () => {
                     </ProtectedRoute>
                   } 
                 />
+                <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </Suspense>
           </main>
