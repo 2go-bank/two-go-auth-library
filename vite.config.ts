@@ -33,6 +33,9 @@ export default defineConfig(({mode}) => ({
         emptyOutDir: true,
         rollupOptions: {
             external: [],
+            input: {
+                main: resolve(__dirname, 'index.html'),
+            },
             output: {
                 globals: {
                     react: 'React',
