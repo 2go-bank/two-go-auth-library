@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { store } from './store/store';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
@@ -14,6 +15,8 @@ const ResetPassword = React.lazy(() => import('./pages/ResetPassword'));
 const Stats = React.lazy(() => import('./pages/Stats'));
 const Settings = React.lazy(() => import('./pages/Settings'));
 const Home = React.lazy(() => import('./pages/Home'));
+
+const queryClient = new QueryClient();
 
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center w-full h-screen">
@@ -61,26 +64,28 @@ const App = () => {
   const basename = isPreview ? '/preview' : '/';
 
   return (
-    <Provider store={store}>
-      <BrowserRouter basename={basename}>
-        <Routes>
-          <Route path="/" element={<AuthLayout />}>
-            <Route index element={<Login />} />
-            <Route path="login" element={<Login />} />
-            <Route path="forgot-password" element={<ForgotPassword />} />
-            <Route path="validate-otp" element={<ValidateOTP />} />
-            <Route path="reset-password" element={<ResetPassword />} />
-          </Route>
-          <Route path="/app" element={<MainLayout />}>
-            <Route index element={<ProtectedRoute><Home /></ProtectedRoute>} />
-            <Route path="stats" element={<ProtectedRoute><Stats /></ProtectedRoute>} />
-            <Route path="settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-          </Route>
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-        <Toaster />
-      </BrowserRouter>
-    </Provider>
+    <QueryClientProvider client={queryClient}>
+      <Provider store={store}>
+        <BrowserRouter basename={basename}>
+          <Routes>
+            <Route path="/" element={<AuthLayout />}>
+              <Route index element={<Login />} />
+              <Route path="login" element={<Login />} />
+              <Route path="forgot-password" element={<ForgotPassword />} />
+              <Route path="validate-otp" element={<ValidateOTP />} />
+              <Route path="reset-password" element={<ResetPassword />} />
+            </Route>
+            <Route path="/app" element={<MainLayout />}>
+              <Route index element={<ProtectedRoute><Home /></ProtectedRoute>} />
+              <Route path="stats" element={<ProtectedRoute><Stats /></ProtectedRoute>} />
+              <Route path="settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+            </Route>
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+          <Toaster />
+        </BrowserRouter>
+      </Provider>
+    </QueryClientProvider>
   );
 };
 
