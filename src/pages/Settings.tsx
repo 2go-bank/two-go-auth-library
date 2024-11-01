@@ -44,7 +44,7 @@ const Settings = () => {
         <Card className="md:col-span-1">
           <CardHeader className="text-center">
             <div className="flex justify-center mb-4">
-              <Avatar className="h-32 w-32">
+              <Avatar className="h-32 w-32 border-2 border-[#EFB207]">
                 <AvatarImage src={user?.avatar} alt={user?.name} />
                 <AvatarFallback className="bg-[#EFB207] text-2xl text-black">
                   {user?.name ? getInitials(user.name) : '??'}
