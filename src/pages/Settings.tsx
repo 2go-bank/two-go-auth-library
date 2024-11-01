@@ -18,6 +18,14 @@ const Settings = () => {
     );
   }
 
+  if (!user) {
+    return (
+      <div className="container mx-auto py-8">
+        <p className="text-center text-gray-600">Não foi possível carregar os dados do usuário.</p>
+      </div>
+    );
+  }
+
   const getInitials = (name: string) => {
     return name
       .split(' ')
