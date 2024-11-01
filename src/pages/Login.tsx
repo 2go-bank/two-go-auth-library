@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useToast } from "@/hooks/use-toast";
 import LoginForm from '@/components/auth/LoginForm';
 import CryptoJS from 'crypto-js';
+import { requestNotificationPermission } from '@/config/firebase';
 
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -37,7 +38,11 @@ const Login = () => {
         const data = await response.json();
         const encryptedData = encryptData(JSON.stringify(data));
         localStorage.setItem('2go-auth', encryptedData);
-        navigate('/app');  // Changed from '/home' to '/app' to match the route structure
+        
+        // Request notification permission after successful login
+        await requestNotificationPermission();
+        
+        navigate('/app');
       } else if (response.status === 401) {
         toast({
           variant: "destructive",
