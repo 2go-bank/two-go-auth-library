@@ -29,11 +29,11 @@ const AuthLayout = () => (
     <main className="flex-grow container mx-auto px-4 py-8">
       <Suspense fallback={<LoadingSpinner />}>
         <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/validate-otp" element={<ValidateOTP />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route index element={<Login />} />
+          <Route path="login" element={<Login />} />
+          <Route path="forgot-password" element={<ForgotPassword />} />
+          <Route path="validate-otp" element={<ValidateOTP />} />
+          <Route path="reset-password" element={<ResetPassword />} />
         </Routes>
       </Suspense>
     </main>
@@ -46,9 +46,9 @@ const MainLayout = () => (
     <main className="flex-grow container mx-auto px-4 py-8">
       <Suspense fallback={<LoadingSpinner />}>
         <Routes>
-          <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-          <Route path="/stats" element={<ProtectedRoute><Stats /></ProtectedRoute>} />
-          <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+          <Route index element={<ProtectedRoute><Home /></ProtectedRoute>} />
+          <Route path="stats" element={<ProtectedRoute><Stats /></ProtectedRoute>} />
+          <Route path="settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
         </Routes>
       </Suspense>
     </main>
@@ -59,12 +59,20 @@ const MainLayout = () => (
 const App = () => {
   return (
     <Provider store={store}>
-      <BrowserRouter>
+      <BrowserRouter basename="/preview">
         <Routes>
-          <Route path="/*" element={<AuthLayout />} />
-          <Route path="/home/*" element={<MainLayout />} />
-          <Route path="/stats/*" element={<MainLayout />} />
-          <Route path="/settings/*" element={<MainLayout />} />
+          <Route path="/" element={<AuthLayout />}>
+            <Route index element={<Login />} />
+            <Route path="login" element={<Login />} />
+            <Route path="forgot-password" element={<ForgotPassword />} />
+            <Route path="validate-otp" element={<ValidateOTP />} />
+            <Route path="reset-password" element={<ResetPassword />} />
+          </Route>
+          <Route path="/app" element={<MainLayout />}>
+            <Route index element={<ProtectedRoute><Home /></ProtectedRoute>} />
+            <Route path="stats" element={<ProtectedRoute><Stats /></ProtectedRoute>} />
+            <Route path="settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+          </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
         <Toaster />
