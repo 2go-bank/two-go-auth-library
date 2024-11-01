@@ -92,7 +92,7 @@ const UserProfileWidget = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="focus:outline-none">
-        <Avatar>
+        <Avatar className="border-2 border-[#EFB207]">
           <AvatarImage src={userData.avatar} alt={userData.name} />
           <AvatarFallback className="bg-[#EFB207] text-black">
             {getInitials(userData.name)}
