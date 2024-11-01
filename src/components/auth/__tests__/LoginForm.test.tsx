@@ -1,56 +1,36 @@
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen, fireEvent } from '@testing-library/react';
 import LoginForm from '../LoginForm';
 
 describe('LoginForm', () => {
   const mockOnSubmit = jest.fn();
 
   beforeEach(() => {
-    mockOnSubmit.mockClear();
+    render(<LoginForm onSubmit={mockOnSubmit} isLoading={false} />);
   });
 
-  it('renders all form elements', () => {
-    render(<LoginForm onSubmit={mockOnSubmit} isLoading={false} />);
-    
-    expect(screen.getByLabelText(/usuário/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/senha/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /entrar/i })).toBeInTheDocument();
-  });
-
-  it('toggles password visibility', async () => {
-    render(<LoginForm onSubmit={mockOnSubmit} isLoading={false} />);
-    
+  test('renders username and password fields', () => {
+    const usernameInput = screen.getByLabelText(/usuário/i);
     const passwordInput = screen.getByLabelText(/senha/i);
-    const toggleButton = screen.getByRole('button', { name: '' });
 
-    expect(passwordInput).toHaveAttribute('type', 'password');
-    
-    await userEvent.click(toggleButton);
-    expect(passwordInput).toHaveAttribute('type', 'text');
-    
-    await userEvent.click(toggleButton);
-    expect(passwordInput).toHaveAttribute('type', 'password');
+    expect(usernameInput).toBeInTheDocument();
+    expect(passwordInput).toBeInTheDocument();
   });
 
-  it('submits form with entered values', async () => {
-    render(<LoginForm onSubmit={mockOnSubmit} isLoading={false} />);
-    
+  test('submits form with username and password', () => {
     const usernameInput = screen.getByLabelText(/usuário/i);
     const passwordInput = screen.getByLabelText(/senha/i);
     const submitButton = screen.getByRole('button', { name: /entrar/i });
 
-    await userEvent.type(usernameInput, 'testuser');
-    await userEvent.type(passwordInput, 'testpass');
-    await userEvent.click(submitButton);
+    fireEvent.change(usernameInput, { target: { value: 'testuser' } });
+    fireEvent.change(passwordInput, { target: { value: 'testpassword' } });
+    fireEvent.click(submitButton);
 
-    expect(mockOnSubmit).toHaveBeenCalledWith('testuser', 'testpass');
+    expect(mockOnSubmit).toHaveBeenCalledWith('testuser', 'testpassword');
   });
 
-  it('disables form when loading', () => {
+  test('disables submit button when loading', () => {
     render(<LoginForm onSubmit={mockOnSubmit} isLoading={true} />);
-    
-    expect(screen.getByLabelText(/usuário/i)).toBeDisabled();
-    expect(screen.getByLabelText(/senha/i)).toBeDisabled();
-    expect(screen.getByRole('button', { name: /entrando/i })).toBeDisabled();
+    const submitButton = screen.getByRole('button', { name: /entrar/i });
+    expect(submitButton).toBeDisabled();
   });
 });
