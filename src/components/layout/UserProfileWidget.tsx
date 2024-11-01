@@ -101,7 +101,7 @@ const UserProfileWidget = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48 bg-black border-gray-700">
         <DropdownMenuItem 
-          onClick={() => navigate('/settings')} 
+          onClick={() => navigate('/app/settings')} 
           className="cursor-pointer text-[#EFB207] hover:text-[#EFB207]/80 hover:bg-gray-900"
         >
           <Settings className="mr-2 h-4 w-4" />
