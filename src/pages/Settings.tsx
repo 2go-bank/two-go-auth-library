@@ -1,19 +1,30 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Mail, Phone } from "lucide-react";
+import { Mail, Phone, Copy, Upload, Download } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiService } from "@/services/api";
 import ColorPicker from "@/components/settings/ColorPicker";
 import { loadStoredColors, saveColors, applyColors, getDefaultColors } from "@/utils/colorConfig";
 import { ColorGroup } from "@/types/colors";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
 
 const Settings = () => {
   const { toast } = useToast();
   const [groups, setGroups] = useState<ColorGroup[]>(loadStoredColors());
+  const [isImportOpen, setIsImportOpen] = useState(false);
+  const [isExportOpen, setIsExportOpen] = useState(false);
+  const [importValue, setImportValue] = useState("");
+  const [exportValue, setExportValue] = useState("");
 
   const { data: user, isLoading } = useQuery({
     queryKey: ['user-profile'],
@@ -59,6 +70,70 @@ const Settings = () => {
       title: "Cores padrão restauradas",
       description: "As cores foram restauradas para a configuração padrão do sistema.",
     });
+  };
+
+  const handleExport = () => {
+    setExportValue(JSON.stringify(groups, null, 2));
+    setIsExportOpen(true);
+  };
+
+  const handleCopyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(exportValue);
+      toast({
+        title: "Copiado!",
+        description: "Configuração copiada para a área de transferência.",
+      });
+    } catch (err) {
+      toast({
+        title: "Erro ao copiar",
+        description: "Não foi possível copiar para a área de transferência.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleImport = () => {
+    try {
+      const parsedValue = JSON.parse(importValue);
+      
+      // Validate the structure of the imported JSON
+      if (!Array.isArray(parsedValue)) {
+        throw new Error("O formato do JSON é inválido");
+      }
+
+      const isValid = parsedValue.every((group: any) => {
+        return (
+          typeof group.title === "string" &&
+          Array.isArray(group.colors) &&
+          group.colors.every((color: any) => 
+            typeof color.key === "string" &&
+            typeof color.label === "string" &&
+            typeof color.value === "string"
+          )
+        );
+      });
+
+      if (!isValid) {
+        throw new Error("A estrutura do JSON é inválida");
+      }
+
+      setGroups(parsedValue);
+      applyColors(parsedValue);
+      setIsImportOpen(false);
+      setImportValue("");
+      
+      toast({
+        title: "Configuração importada",
+        description: "As cores foram atualizadas com sucesso.",
+      });
+    } catch (err) {
+      toast({
+        title: "Erro na importação",
+        description: err instanceof Error ? err.message : "Formato de JSON inválido",
+        variant: "destructive",
+      });
+    }
   };
 
   if (isLoading) {
@@ -117,7 +192,25 @@ const Settings = () => {
 
         <Card className="md:col-span-2">
           <CardHeader>
-            <CardTitle>Configurações de Cores</CardTitle>
+            <div className="flex justify-between items-center">
+              <CardTitle>Configurações de Cores</CardTitle>
+              <div className="flex gap-4">
+                <button
+                  onClick={() => setIsImportOpen(true)}
+                  className="text-sm flex items-center gap-1 text-gray-600 hover:text-gray-900"
+                >
+                  <Upload className="h-4 w-4" />
+                  Importar
+                </button>
+                <button
+                  onClick={handleExport}
+                  className="text-sm flex items-center gap-1 text-gray-600 hover:text-gray-900"
+                >
+                  <Download className="h-4 w-4" />
+                  Exportar
+                </button>
+              </div>
+            </div>
           </CardHeader>
           <CardContent>
             <div className="space-y-8">
@@ -162,6 +255,60 @@ const Settings = () => {
           </CardContent>
         </Card>
       </div>
+
+      <Dialog open={isImportOpen} onOpenChange={setIsImportOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Importar Configuração</DialogTitle>
+            <DialogDescription>
+              Cole abaixo o JSON com a configuração de cores que deseja importar
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <Textarea
+              value={importValue}
+              onChange={(e) => setImportValue(e.target.value)}
+              placeholder="Cole o JSON aqui..."
+              className="min-h-[200px] font-mono text-sm"
+            />
+            <div className="flex justify-end gap-4">
+              <Button variant="outline" onClick={() => setIsImportOpen(false)}>
+                Cancelar
+              </Button>
+              <Button onClick={handleImport}>
+                Importar
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isExportOpen} onOpenChange={setIsExportOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Exportar Configuração</DialogTitle>
+            <DialogDescription>
+              Copie o JSON abaixo para salvar sua configuração de cores
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <Textarea
+              value={exportValue}
+              readOnly
+              className="min-h-[200px] font-mono text-sm"
+            />
+            <div className="flex justify-end gap-4">
+              <Button variant="outline" onClick={() => setIsExportOpen(false)}>
+                Fechar
+              </Button>
+              <Button onClick={handleCopyToClipboard} className="flex items-center gap-2">
+                <Copy className="h-4 w-4" />
+                Copiar
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
