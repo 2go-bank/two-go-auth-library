@@ -5,7 +5,6 @@ import { isAuthenticated } from '@/utils/auth';
 const Header = () => {
   const isUserAuthenticated = isAuthenticated();
   const headerBgColor = import.meta.env.VITE_HEADER_BG_COLOR || '#000000';
-  const headerTextColor = import.meta.env.VITE_HEADER_TEXT_COLOR || '#EFB207';
   const headerLinkColor = import.meta.env.VITE_HEADER_LINK_COLOR || '#EFB207';
 
   return (
