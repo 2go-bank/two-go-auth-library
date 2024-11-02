@@ -14,8 +14,8 @@ import { ColorGroup, EnvGroup } from "@/types/colors";
 import ColorConfigCard from "@/components/settings/ColorConfigCard";
 import EnvConfigCard from "@/components/settings/EnvConfigCard";
 import ImportExportModals from "@/components/settings/ImportExportModals";
-import { Button } from "@/components/ui/button";
-import { Download } from "lucide-react";
+import SettingsHeader from "@/components/settings/SettingsHeader";
+import { generateEnvContent, downloadEnvFile } from "@/utils/envDownload";
 
 const Settings = () => {
   const { toast } = useToast();
@@ -90,6 +90,16 @@ const Settings = () => {
     });
   };
 
+  const handleDownloadEnv = () => {
+    const envContent = generateEnvContent(envGroups, groups);
+    downloadEnvFile(envContent);
+    
+    toast({
+      title: "Download iniciado",
+      description: "O arquivo .env está sendo baixado.",
+    });
+  };
+
   const handleExport = () => {
     setExportValue(JSON.stringify(groups, null, 2));
     setIsExportOpen(true);
@@ -157,42 +167,9 @@ const Settings = () => {
     }
   };
 
-  const handleDownloadEnv = () => {
-    const envContent = envGroups
-      .flatMap(group => 
-        group.configs.map(config => `${config.key}=${config.value}`)
-      )
-      .join('\n');
-
-    const blob = new Blob([envContent], { type: 'text/plain' });
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', '.env');
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
-
-    toast({
-      title: "Download iniciado",
-      description: "O arquivo .env está sendo baixado.",
-    });
-  };
-
   return (
     <div className="container mx-auto py-8 space-y-8">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-900">Configurações do Sistema</h1>
-        <Button
-          onClick={handleDownloadEnv}
-          variant="outline"
-          className="flex items-center gap-2 border-[#EFB207] text-[#EFB207] hover:bg-[#EFB207]/10"
-        >
-          <Download className="h-4 w-4" />
-          Baixar configurações do ambiente
-        </Button>
-      </div>
+      <SettingsHeader onDownload={handleDownloadEnv} />
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <ColorConfigCard
