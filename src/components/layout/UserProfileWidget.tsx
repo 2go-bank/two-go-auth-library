@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../../components/ui/dropdown-menu";
-import { Settings, LogOut } from "lucide-react";
+import { Settings, LogOut, User } from "lucide-react";
 import CryptoJS from 'crypto-js';
 import { apiService } from '@/services/api';
 import { useToast } from "@/hooks/use-toast";
@@ -101,6 +101,14 @@ const UserProfileWidget = () => {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48 bg-black border-gray-700">
+        <DropdownMenuItem 
+          onClick={() => navigate('/app/profile')} 
+          style={{ color: avatarBorderColor }}
+          className="cursor-pointer hover:opacity-80 hover:bg-gray-900"
+        >
+          <User className="mr-2 h-4 w-4" />
+          Meu Perfil
+        </DropdownMenuItem>
         <DropdownMenuItem 
           onClick={() => navigate('/app/settings')} 
           style={{ color: avatarBorderColor }}

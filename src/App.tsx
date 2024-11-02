@@ -14,6 +14,7 @@ const ValidateOTP = React.lazy(() => import('./pages/ValidateOTP'));
 const ResetPassword = React.lazy(() => import('./pages/ResetPassword'));
 const Stats = React.lazy(() => import('./pages/Stats'));
 const Settings = React.lazy(() => import('./pages/Settings'));
+const Profile = React.lazy(() => import('./pages/Profile'));
 const Home = React.lazy(() => import('./pages/Home'));
 
 const queryClient = new QueryClient();
@@ -52,6 +53,7 @@ const MainLayout = () => (
           <Route index element={<ProtectedRoute><Home /></ProtectedRoute>} />
           <Route path="stats" element={<ProtectedRoute><Stats /></ProtectedRoute>} />
           <Route path="settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+          <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         </Routes>
       </Suspense>
     </main>
@@ -79,6 +81,7 @@ const App = () => {
               <Route index element={<ProtectedRoute><Home /></ProtectedRoute>} />
               <Route path="stats" element={<ProtectedRoute><Stats /></ProtectedRoute>} />
               <Route path="settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+              <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             </Route>
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

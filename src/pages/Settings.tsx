@@ -1,7 +1,5 @@
-import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { apiService } from "@/services/api";
 import { 
   loadStoredColors, 
   saveColors, 
@@ -13,7 +11,6 @@ import {
   getDefaultEnvConfigs
 } from "@/utils/colorConfig";
 import { ColorGroup, EnvGroup } from "@/types/colors";
-import ProfileCard from "@/components/settings/ProfileCard";
 import ColorConfigCard from "@/components/settings/ColorConfigCard";
 import EnvConfigCard from "@/components/settings/EnvConfigCard";
 import ImportExportModals from "@/components/settings/ImportExportModals";
@@ -26,16 +23,6 @@ const Settings = () => {
   const [isExportOpen, setIsExportOpen] = useState(false);
   const [importValue, setImportValue] = useState("");
   const [exportValue, setExportValue] = useState("");
-
-  const { data: user, isLoading } = useQuery({
-    queryKey: ['user-profile'],
-    queryFn: () => apiService.user.getProfile()
-  });
-
-  useEffect(() => {
-    applyColors(groups);
-    applyEnvConfigs(envGroups);
-  }, []);
 
   const handleColorChange = (groupIndex: number, colorIndex: number, newValue: string) => {
     setGroups(prevGroups => {
@@ -145,7 +132,6 @@ const Settings = () => {
         throw new Error("A estrutura do JSON é inválida");
       }
 
-      // Merge imported colors with existing groups, preserving titles
       const updatedGroups = groups.map((existingGroup, index) => ({
         ...existingGroup,
         colors: parsedValue[index]?.colors || existingGroup.colors
@@ -169,28 +155,11 @@ const Settings = () => {
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#EFB207]"></div>
-      </div>
-    );
-  }
-
-  if (!user) {
-    return (
-      <div className="container mx-auto py-8">
-        <p className="text-center text-gray-600">Não foi possível carregar os dados do usuário.</p>
-      </div>
-    );
-  }
-
   return (
     <div className="container mx-auto py-8 space-y-8">
-      <h1 className="text-3xl font-bold text-gray-900">Configurações do Perfil</h1>
+      <h1 className="text-3xl font-bold text-gray-900">Configurações do Sistema</h1>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <ProfileCard user={user} />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <ColorConfigCard
           groups={groups}
           onColorChange={handleColorChange}
@@ -200,9 +169,6 @@ const Settings = () => {
           onImportClick={() => setIsImportOpen(true)}
           onExportClick={handleExport}
         />
-      </div>
-
-      <div className="grid grid-cols-1 gap-6">
         <EnvConfigCard
           groups={envGroups}
           onConfigChange={handleEnvConfigChange}
