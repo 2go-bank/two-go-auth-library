@@ -1,5 +1,6 @@
-import { ColorGroup } from '@/types/colors';
+import { ColorGroup, EnvGroup } from '@/types/colors';
 
+const ENV_STORAGE_KEY = '2go-env-config';
 const COLOR_STORAGE_KEY = '2go-color-config';
 
 export const getDefaultColors = (): ColorGroup[] => [
@@ -46,13 +47,59 @@ export const getDefaultColors = (): ColorGroup[] => [
   }
 ];
 
+export const getDefaultEnvConfigs = (): EnvGroup[] => [
+  {
+    title: "URLs e Endpoints",
+    configs: [
+      { 
+        key: 'VITE_AUTH_API_URL', 
+        label: 'URL da API de Autenticação', 
+        value: import.meta.env.VITE_AUTH_API_URL || '', 
+        type: 'url' 
+      },
+      { 
+        key: 'VITE_API_BASE_URL', 
+        label: 'URL Base da API', 
+        value: import.meta.env.VITE_API_BASE_URL || '', 
+        type: 'url' 
+      },
+      { 
+        key: 'VITE_LOGO_URL', 
+        label: 'URL do Logo', 
+        value: import.meta.env.VITE_LOGO_URL || '', 
+        type: 'url' 
+      }
+    ]
+  },
+  {
+    title: "Configurações do Sistema",
+    configs: [
+      { 
+        key: 'VITE_ENVIRONMENT', 
+        label: 'Ambiente', 
+        value: import.meta.env.VITE_ENVIRONMENT || '', 
+        type: 'text' 
+      }
+    ]
+  }
+];
+
 export const loadStoredColors = (): ColorGroup[] => {
   const stored = localStorage.getItem(COLOR_STORAGE_KEY);
   return stored ? JSON.parse(stored) : getDefaultColors();
 };
 
+export const loadStoredEnvConfigs = (): EnvGroup[] => {
+  const stored = localStorage.getItem(ENV_STORAGE_KEY);
+  return stored ? JSON.parse(stored) : getDefaultEnvConfigs();
+};
+
 export const saveColors = (colors: ColorGroup[]) => {
   localStorage.setItem(COLOR_STORAGE_KEY, JSON.stringify(colors));
+};
+
+export const saveEnvConfigs = (configs: EnvGroup[]) => {
+  localStorage.setItem(ENV_STORAGE_KEY, JSON.stringify(configs));
 };
 
 export const applyColors = (colors: ColorGroup[]) => {
@@ -61,6 +108,21 @@ export const applyColors = (colors: ColorGroup[]) => {
     group.colors.forEach(color => {
       const cssVar = `--${color.key}`;
       root.style.setProperty(cssVar, color.value);
+    });
+  });
+};
+
+export const applyEnvConfigs = (groups: EnvGroup[]) => {
+  const root = document.documentElement;
+  groups.forEach(group => {
+    group.configs.forEach(config => {
+      const cssVar = `--${config.key}`;
+      root.style.setProperty(cssVar, config.value);
+      // Also update window.env for runtime access
+      (window as any).env = {
+        ...(window as any).env,
+        [config.key]: config.value
+      };
     });
   });
 };

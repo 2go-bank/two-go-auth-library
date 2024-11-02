@@ -2,15 +2,26 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { apiService } from "@/services/api";
-import { loadStoredColors, saveColors, applyColors, getDefaultColors } from "@/utils/colorConfig";
-import { ColorGroup } from "@/types/colors";
+import { 
+  loadStoredColors, 
+  saveColors, 
+  applyColors, 
+  getDefaultColors,
+  loadStoredEnvConfigs,
+  saveEnvConfigs,
+  applyEnvConfigs,
+  getDefaultEnvConfigs
+} from "@/utils/colorConfig";
+import { ColorGroup, EnvGroup } from "@/types/colors";
 import ProfileCard from "@/components/settings/ProfileCard";
 import ColorConfigCard from "@/components/settings/ColorConfigCard";
+import EnvConfigCard from "@/components/settings/EnvConfigCard";
 import ImportExportModals from "@/components/settings/ImportExportModals";
 
 const Settings = () => {
   const { toast } = useToast();
   const [groups, setGroups] = useState<ColorGroup[]>(loadStoredColors());
+  const [envGroups, setEnvGroups] = useState<EnvGroup[]>(loadStoredEnvConfigs());
   const [isImportOpen, setIsImportOpen] = useState(false);
   const [isExportOpen, setIsExportOpen] = useState(false);
   const [importValue, setImportValue] = useState("");
@@ -23,6 +34,7 @@ const Settings = () => {
 
   useEffect(() => {
     applyColors(groups);
+    applyEnvConfigs(envGroups);
   }, []);
 
   const handleColorChange = (groupIndex: number, colorIndex: number, newValue: string) => {
@@ -33,12 +45,29 @@ const Settings = () => {
     });
   };
 
+  const handleEnvConfigChange = (groupIndex: number, configIndex: number, newValue: string) => {
+    setEnvGroups(prevGroups => {
+      const newGroups = [...prevGroups];
+      newGroups[groupIndex].configs[configIndex].value = newValue;
+      return newGroups;
+    });
+  };
+
   const handleSaveColors = () => {
     saveColors(groups);
     applyColors(groups);
     toast({
       title: "Configurações salvas",
       description: "As cores foram atualizadas com sucesso.",
+    });
+  };
+
+  const handleSaveEnvConfigs = () => {
+    saveEnvConfigs(envGroups);
+    applyEnvConfigs(envGroups);
+    toast({
+      title: "Configurações de ambiente salvas",
+      description: "As configurações foram atualizadas com sucesso.",
     });
   };
 
@@ -59,6 +88,16 @@ const Settings = () => {
     toast({
       title: "Cores padrão restauradas",
       description: "As cores foram restauradas para a configuração padrão do sistema.",
+    });
+  };
+
+  const handleResetEnvToDefault = () => {
+    const defaultConfigs = getDefaultEnvConfigs();
+    setEnvGroups(defaultConfigs);
+    applyEnvConfigs(defaultConfigs);
+    toast({
+      title: "Configurações padrão restauradas",
+      description: "As configurações foram restauradas para o padrão do sistema.",
     });
   };
 
@@ -160,6 +199,15 @@ const Settings = () => {
           onResetToDefault={handleResetToDefault}
           onImportClick={() => setIsImportOpen(true)}
           onExportClick={handleExport}
+        />
+      </div>
+
+      <div className="grid grid-cols-1 gap-6">
+        <EnvConfigCard
+          groups={envGroups}
+          onConfigChange={handleEnvConfigChange}
+          onSaveConfigs={handleSaveEnvConfigs}
+          onResetToDefault={handleResetEnvToDefault}
         />
       </div>
 
