@@ -20,7 +20,7 @@ const Header = () => {
         </Link>
         <div className="flex items-center space-x-6">
           <nav className="hidden md:block">
-            <ul className="flex space-x-6">
+            <ul className="flex space-x-6" style={{ color: headerTextColor }}>
               {isUserAuthenticated ? (
                 <>
                   <li>
