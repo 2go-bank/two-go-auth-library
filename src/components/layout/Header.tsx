@@ -9,7 +9,10 @@ const Header = () => {
   const headerLinkColor = import.meta.env.VITE_HEADER_LINK_COLOR || '#EFB207';
 
   return (
-    <header style={{ backgroundColor: headerBgColor }} className="w-full py-4 px-6">
+    <header 
+      style={{ backgroundColor: headerBgColor }} 
+      className="w-full py-4 px-6 sticky top-0 z-50 shadow-md"
+    >
       <div className="container mx-auto flex justify-between items-center">
         <Link to="/app" className="flex items-center">
           <img 
