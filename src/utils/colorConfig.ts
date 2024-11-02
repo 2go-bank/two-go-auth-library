@@ -77,8 +77,9 @@ export const getDefaultEnvConfigs = (): EnvGroup[] => [
       { 
         key: 'VITE_ENVIRONMENT', 
         label: 'Ambiente', 
-        value: import.meta.env.VITE_ENVIRONMENT || '', 
-        type: 'text' 
+        value: import.meta.env.VITE_ENVIRONMENT || 'production', 
+        type: 'select',
+        options: ['production', 'development']
       }
     ]
   }

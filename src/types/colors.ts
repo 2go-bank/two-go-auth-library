@@ -13,7 +13,8 @@ export interface EnvConfig {
   key: string;
   label: string;
   value: string;
-  type: 'color' | 'text' | 'url';
+  type: 'color' | 'text' | 'url' | 'select';
+  options?: string[];
 }
 
 export interface EnvGroup {

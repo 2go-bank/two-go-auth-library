@@ -2,6 +2,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { EnvGroup } from "@/types/colors";
 
 interface EnvConfigCardProps {
@@ -31,11 +32,29 @@ const EnvConfigCard = ({
                 {group.configs.map((config, configIndex) => (
                   <div key={config.key} className="space-y-2">
                     <Label>{config.label}</Label>
-                    <Input
-                      type={config.type === 'url' ? 'url' : 'text'}
-                      value={config.value}
-                      onChange={(e) => onConfigChange(groupIndex, configIndex, e.target.value)}
-                    />
+                    {config.type === 'select' && config.options ? (
+                      <Select
+                        value={config.value}
+                        onValueChange={(value) => onConfigChange(groupIndex, configIndex, value)}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione o ambiente" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {config.options.map((option) => (
+                            <SelectItem key={option} value={option}>
+                              {option}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    ) : (
+                      <Input
+                        type={config.type === 'url' ? 'url' : 'text'}
+                        value={config.value}
+                        onChange={(e) => onConfigChange(groupIndex, configIndex, e.target.value)}
+                      />
+                    )}
                   </div>
                 ))}
               </div>
