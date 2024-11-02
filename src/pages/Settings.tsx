@@ -1,79 +1,27 @@
+import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { HexColorPicker } from "react-colorful";
-import { apiService } from "@/services/api";
 import { Mail, Phone } from "lucide-react";
-import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-
-interface ColorConfig {
-  key: string;
-  label: string;
-  value: string;
-}
-
-interface ColorGroup {
-  title: string;
-  colors: ColorConfig[];
-}
+import { apiService } from "@/services/api";
+import ColorPicker from "@/components/settings/ColorPicker";
+import { loadStoredColors, saveColors, applyColors } from "@/utils/colorConfig";
+import { ColorGroup } from "@/types/colors";
+import { useState } from "react";
 
 const Settings = () => {
   const { toast } = useToast();
-  const [activeColorPicker, setActiveColorPicker] = useState<string | null>(null);
-  
-  const colorGroups: ColorGroup[] = [
-    {
-      title: "Cores Gerais",
-      colors: [
-        { key: 'VITE_BODY_BG_COLOR', label: 'Cor de Fundo', value: import.meta.env.VITE_BODY_BG_COLOR || '#FFFFFF' },
-        { key: 'VITE_BODY_TEXT_COLOR', label: 'Cor do Texto', value: import.meta.env.VITE_BODY_TEXT_COLOR || '#000000' },
-        { key: 'VITE_BODY_LINK_COLOR', label: 'Cor dos Links', value: import.meta.env.VITE_BODY_LINK_COLOR || '#EFB207' },
-      ]
-    },
-    {
-      title: "Cores dos Títulos",
-      colors: [
-        { key: 'VITE_BODY_H1_COLOR', label: 'Cor H1', value: import.meta.env.VITE_BODY_H1_COLOR || '#111111' },
-        { key: 'VITE_BODY_H2_COLOR', label: 'Cor H2', value: import.meta.env.VITE_BODY_H2_COLOR || '#222222' },
-        { key: 'VITE_BODY_H3_COLOR', label: 'Cor H3', value: import.meta.env.VITE_BODY_H3_COLOR || '#222222' },
-        { key: 'VITE_BODY_H4_COLOR', label: 'Cor H4', value: import.meta.env.VITE_BODY_H4_COLOR || '#333333' },
-        { key: 'VITE_BODY_H5_COLOR', label: 'Cor H5', value: import.meta.env.VITE_BODY_H5_COLOR || '#333333' },
-        { key: 'VITE_BODY_H6_COLOR', label: 'Cor H6', value: import.meta.env.VITE_BODY_H6_COLOR || '#444444' },
-      ]
-    },
-    {
-      title: "Cores do Cabeçalho",
-      colors: [
-        { key: 'VITE_HEADER_BG_COLOR', label: 'Cor de Fundo', value: import.meta.env.VITE_HEADER_BG_COLOR || '#000000' },
-        { key: 'VITE_HEADER_TEXT_COLOR', label: 'Cor do Texto', value: import.meta.env.VITE_HEADER_TEXT_COLOR || '#EFB207' },
-        { key: 'VITE_HEADER_LINK_COLOR', label: 'Cor dos Links', value: import.meta.env.VITE_HEADER_LINK_COLOR || '#EFB207' },
-      ]
-    },
-    {
-      title: "Cores do Rodapé",
-      colors: [
-        { key: 'VITE_FOOTER_BG_COLOR', label: 'Cor de Fundo', value: import.meta.env.VITE_FOOTER_BG_COLOR || '#000000' },
-        { key: 'VITE_FOOTER_TEXT_COLOR', label: 'Cor do Texto', value: import.meta.env.VITE_FOOTER_TEXT_COLOR || '#EFB207' },
-        { key: 'VITE_FOOTER_LINK_COLOR', label: 'Cor dos Links', value: import.meta.env.VITE_FOOTER_LINK_COLOR || '#EFB207' },
-      ]
-    },
-    {
-      title: "Outras Cores",
-      colors: [
-        { key: 'VITE_AVATAR_BORDER_COLOR', label: 'Cor da Borda do Avatar', value: import.meta.env.VITE_AVATAR_BORDER_COLOR || '#EFB207' },
-      ]
-    }
-  ];
-
-  const [groups, setGroups] = useState<ColorGroup[]>(colorGroups);
+  const [groups, setGroups] = useState<ColorGroup[]>(loadStoredColors());
 
   const { data: user, isLoading } = useQuery({
     queryKey: ['user-profile'],
     queryFn: () => apiService.user.getProfile()
   });
+
+  useEffect(() => {
+    applyColors(groups);
+  }, []);
 
   const handleColorChange = (groupIndex: number, colorIndex: number, newValue: string) => {
     setGroups(prevGroups => {
@@ -84,6 +32,8 @@ const Settings = () => {
   };
 
   const handleSaveColors = () => {
+    saveColors(groups);
+    applyColors(groups);
     toast({
       title: "Configurações salvas",
       description: "As cores foram atualizadas com sucesso.",
@@ -120,7 +70,6 @@ const Settings = () => {
       <h1 className="text-3xl font-bold text-gray-900">Configurações do Perfil</h1>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Profile Card */}
         <Card className="md:col-span-1">
           <CardHeader className="text-center">
             <div className="flex justify-center mb-4">
@@ -145,7 +94,6 @@ const Settings = () => {
           </CardContent>
         </Card>
 
-        {/* Color Settings */}
         <Card className="md:col-span-2">
           <CardHeader>
             <CardTitle>Configurações de Cores</CardTitle>
@@ -157,36 +105,12 @@ const Settings = () => {
                   <h3 className="text-lg font-semibold border-b pb-2">{group.title}</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {group.colors.map((color, colorIndex) => (
-                      <div key={color.key} className="space-y-2">
-                        <Label>{color.label}</Label>
-                        <div className="flex gap-2">
-                          <Input
-                            type="text"
-                            value={color.value}
-                            onChange={(e) => handleColorChange(groupIndex, colorIndex, e.target.value)}
-                            className="flex-1"
-                          />
-                          <div className="relative">
-                            <div
-                              className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
-                              style={{ backgroundColor: color.value }}
-                              onClick={() => setActiveColorPicker(activeColorPicker === color.key ? null : color.key)}
-                            />
-                            {activeColorPicker === color.key && (
-                              <div className="absolute z-10 mt-2">
-                                <div 
-                                  className="fixed inset-0" 
-                                  onClick={() => setActiveColorPicker(null)}
-                                />
-                                <HexColorPicker
-                                  color={color.value}
-                                  onChange={(newColor) => handleColorChange(groupIndex, colorIndex, newColor)}
-                                />
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </div>
+                      <ColorPicker
+                        key={color.key}
+                        label={color.label}
+                        value={color.value}
+                        onChange={(newValue) => handleColorChange(groupIndex, colorIndex, newValue)}
+                      />
                     ))}
                   </div>
                 </div>
