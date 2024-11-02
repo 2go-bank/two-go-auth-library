@@ -7,6 +7,7 @@ const Header = () => {
   const headerBgColor = import.meta.env.VITE_HEADER_BG_COLOR || '#000000';
   const headerTextColor = import.meta.env.VITE_HEADER_TEXT_COLOR || '#EFB207';
   const headerLinkColor = import.meta.env.VITE_HEADER_LINK_COLOR || '#EFB207';
+  const logoUrl = (window as any).env?.VITE_LOGO_URL || import.meta.env.VITE_LOGO_URL;
 
   return (
     <header 
@@ -16,7 +17,7 @@ const Header = () => {
       <div className="container mx-auto flex justify-between items-center">
         <Link to="/app" className="flex items-center">
           <img 
-            src={import.meta.env.VITE_LOGO_URL}
+            src={logoUrl}
             alt="2GO Bank Logo" 
             className="h-8 md:h-10"
           />

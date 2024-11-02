@@ -9,6 +9,7 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+  const logoUrl = (window as any).env?.VITE_LOGO_URL || import.meta.env.VITE_LOGO_URL;
 
   const encryptData = (data: string) => {
     const secretKey = '2go-secret-key';
@@ -72,7 +73,7 @@ const Login = () => {
       <div className="w-full max-w-md space-y-8 p-8 bg-black rounded-lg shadow-lg">
         <div className="flex justify-center mb-8">
           <img 
-            src={import.meta.env.VITE_LOGO_URL}
+            src={logoUrl}
             alt="2GO Bank Logo" 
             className="h-12"
           />
