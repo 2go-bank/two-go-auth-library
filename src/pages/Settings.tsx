@@ -6,9 +6,10 @@ import { Mail, Phone } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiService } from "@/services/api";
 import ColorPicker from "@/components/settings/ColorPicker";
-import { loadStoredColors, saveColors, applyColors } from "@/utils/colorConfig";
+import { loadStoredColors, saveColors, applyColors, getDefaultColors } from "@/utils/colorConfig";
 import { ColorGroup } from "@/types/colors";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 const Settings = () => {
   const { toast } = useToast();
@@ -37,6 +38,26 @@ const Settings = () => {
     toast({
       title: "Configurações salvas",
       description: "As cores foram atualizadas com sucesso.",
+    });
+  };
+
+  const handleResetToSaved = () => {
+    const savedColors = loadStoredColors();
+    setGroups(savedColors);
+    applyColors(savedColors);
+    toast({
+      title: "Cores restauradas",
+      description: "As cores foram restauradas para a última configuração salva.",
+    });
+  };
+
+  const handleResetToDefault = () => {
+    const defaultColors = getDefaultColors();
+    setGroups(defaultColors);
+    applyColors(defaultColors);
+    toast({
+      title: "Cores padrão restauradas",
+      description: "As cores foram restauradas para a configuração padrão do sistema.",
     });
   };
 
@@ -116,13 +137,27 @@ const Settings = () => {
                 </div>
               ))}
             </div>
-            <div className="mt-6">
-              <button
+            <div className="mt-6 flex flex-wrap gap-4">
+              <Button
                 onClick={handleSaveColors}
-                className="bg-[#EFB207] text-white px-4 py-2 rounded hover:bg-[#EFB207]/90 transition-colors"
+                className="bg-[#EFB207] text-white hover:bg-[#EFB207]/90 transition-colors"
               >
                 Salvar Configurações
-              </button>
+              </Button>
+              <Button
+                onClick={handleResetToSaved}
+                variant="outline"
+                className="border-[#EFB207] text-[#EFB207] hover:bg-[#EFB207]/10"
+              >
+                Restaurar Configuração Salva
+              </Button>
+              <Button
+                onClick={handleResetToDefault}
+                variant="outline"
+                className="border-gray-300 text-gray-700 hover:bg-gray-100"
+              >
+                Restaurar Padrão do Sistema
+              </Button>
             </div>
           </CardContent>
         </Card>
