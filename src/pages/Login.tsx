@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useToast } from "@/hooks/use-toast";
 import LoginForm from '@/components/auth/LoginForm';
@@ -9,7 +9,16 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
-  const logoUrl = (window as any).env?.VITE_LOGO_URL || import.meta.env.VITE_LOGO_URL;
+  const [logoUrl, setLogoUrl] = useState((window as any).env?.VITE_LOGO_URL || import.meta.env.VITE_LOGO_URL);
+
+  useEffect(() => {
+    const handleEnvUpdate = () => {
+      setLogoUrl((window as any).env?.VITE_LOGO_URL || import.meta.env.VITE_LOGO_URL);
+    };
+
+    window.addEventListener('env-updated', handleEnvUpdate);
+    return () => window.removeEventListener('env-updated', handleEnvUpdate);
+  }, []);
 
   const encryptData = (data: string) => {
     const secretKey = '2go-secret-key';

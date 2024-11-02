@@ -115,15 +115,19 @@ export const applyColors = (colors: ColorGroup[]) => {
 
 export const applyEnvConfigs = (groups: EnvGroup[]) => {
   const root = document.documentElement;
+  if (!(window as any).env) {
+    (window as any).env = {};
+  }
+  
   groups.forEach(group => {
     group.configs.forEach(config => {
       const cssVar = `--${config.key}`;
       root.style.setProperty(cssVar, config.value);
-      // Also update window.env for runtime access
-      (window as any).env = {
-        ...(window as any).env,
-        [config.key]: config.value
-      };
+      // Update window.env with the new value
+      (window as any).env[config.key] = config.value;
     });
   });
+
+  // Force a re-render of components that depend on window.env
+  window.dispatchEvent(new Event('env-updated'));
 };

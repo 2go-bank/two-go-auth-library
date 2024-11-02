@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import UserProfileWidget from './UserProfileWidget';
 import { isAuthenticated } from '@/utils/auth';
 
@@ -7,7 +8,16 @@ const Header = () => {
   const headerBgColor = import.meta.env.VITE_HEADER_BG_COLOR || '#000000';
   const headerTextColor = import.meta.env.VITE_HEADER_TEXT_COLOR || '#EFB207';
   const headerLinkColor = import.meta.env.VITE_HEADER_LINK_COLOR || '#EFB207';
-  const logoUrl = (window as any).env?.VITE_LOGO_URL || import.meta.env.VITE_LOGO_URL;
+  const [logoUrl, setLogoUrl] = useState((window as any).env?.VITE_LOGO_URL || import.meta.env.VITE_LOGO_URL);
+
+  useEffect(() => {
+    const handleEnvUpdate = () => {
+      setLogoUrl((window as any).env?.VITE_LOGO_URL || import.meta.env.VITE_LOGO_URL);
+    };
+
+    window.addEventListener('env-updated', handleEnvUpdate);
+    return () => window.removeEventListener('env-updated', handleEnvUpdate);
+  }, []);
 
   return (
     <header 
