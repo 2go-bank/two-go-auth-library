@@ -11,8 +11,20 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    background-color: var(--VITE_BODY_BG_COLOR, #FFFFFF);
+    color: var(--VITE_BODY_TEXT_COLOR, #000000);
   }
+
+  a {
+    color: var(--VITE_BODY_LINK_COLOR, #EFB207);
+  }
+
+  h1 { color: var(--VITE_BODY_H1_COLOR, #111111); }
+  h2 { color: var(--VITE_BODY_H2_COLOR, #222222); }
+  h3 { color: var(--VITE_BODY_H3_COLOR, #222222); }
+  h4 { color: var(--VITE_BODY_H4_COLOR, #333333); }
+  h5 { color: var(--VITE_BODY_H5_COLOR, #333333); }
+  h6 { color: var(--VITE_BODY_H6_COLOR, #444444); }
 }
 
 @layer components {

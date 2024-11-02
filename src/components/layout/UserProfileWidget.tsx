@@ -22,6 +22,7 @@ const UserProfileWidget = () => {
   const { toast } = useToast();
   const [userData, setUserData] = useState<UserData | null>(null);
   const [fetchFailed, setFetchFailed] = useState(false);
+  const avatarBorderColor = import.meta.env.VITE_AVATAR_BORDER_COLOR || '#EFB207';
 
   const encryptData = (data: any) => {
     const secretKey = '2go-secret-key';
@@ -92,9 +93,9 @@ const UserProfileWidget = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="focus:outline-none">
-        <Avatar className="border-2 border-[#EFB207]">
+        <Avatar style={{ borderColor: avatarBorderColor }} className="border-2">
           <AvatarImage src={userData.avatar} alt={userData.name} />
-          <AvatarFallback className="bg-[#EFB207] text-black">
+          <AvatarFallback style={{ backgroundColor: avatarBorderColor }} className="text-black">
             {getInitials(userData.name)}
           </AvatarFallback>
         </Avatar>
@@ -102,7 +103,8 @@ const UserProfileWidget = () => {
       <DropdownMenuContent align="end" className="w-48 bg-black border-gray-700">
         <DropdownMenuItem 
           onClick={() => navigate('/app/settings')} 
-          className="cursor-pointer text-[#EFB207] hover:text-[#EFB207]/80 hover:bg-gray-900"
+          style={{ color: avatarBorderColor }}
+          className="cursor-pointer hover:opacity-80 hover:bg-gray-900"
         >
           <Settings className="mr-2 h-4 w-4" />
           Configurações
