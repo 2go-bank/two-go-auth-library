@@ -32,3 +32,7 @@
     @apply bg-[#EFB207] text-white hover:bg-[#EFB207]/90 px-4 py-2 rounded;
   }
 }
+
+[data-radix-popper-content-wrapper] {
+  background-color: white !important;
+}
