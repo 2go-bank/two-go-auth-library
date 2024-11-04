@@ -9,6 +9,7 @@ import { Toaster } from '@/components/ui';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import { initializeConfigs } from './utils/colorConfig';
 
+// Lazy loaded components
 const Login = React.lazy(() => import('./pages/Login'));
 const ForgotPassword = React.lazy(() => import('./pages/ForgotPassword'));
 const ValidateOTP = React.lazy(() => import('./pages/ValidateOTP'));

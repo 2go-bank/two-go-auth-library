@@ -55,7 +55,7 @@ const PlanCard = ({ plan }: PlanCardProps) => {
   const yearlyTotal = monthlyTotal * 10;
 
   const handleChoosePlan = () => {
-    navigate('/checkout', { state: { plan } });
+    navigate('/app/checkout', { state: { plan } });
   };
 
   return (
