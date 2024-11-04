@@ -3,15 +3,18 @@ import { Button } from '@/components/ui/button';
 import { formatCurrency } from '@/utils/formatters';
 import { Plan } from '@/types/user';
 import { 
-  CreditCard, 
-  ShoppingBag, 
-  Wallet, 
-  Building2, 
-  Landmark,
-  Receipt,
-  BadgeDollarSign,
-  PiggyBank,
+  Ticket,
+  Trophy,
+  Armchair,
   Gift,
+  Newspaper,
+  Dice,
+  Scan,
+  Building2,
+  Stadium,
+  PackageCheck,
+  Store,
+  ShoppingCart,
   MinusCircle,
   Info
 } from 'lucide-react';
@@ -23,15 +26,18 @@ interface PlanCardProps {
 const getIconForProduct = (productName: string, value: number) => {
   // Base icon mapping for product types
   const iconMap: Record<string, React.ReactNode> = {
-    'Cartão': <CreditCard className="h-5 w-5" />,
-    'Conta': <Wallet className="h-5 w-5" />,
-    'Compras': <ShoppingBag className="h-5 w-5" />,
-    'Empresarial': <Building2 className="h-5 w-5" />,
-    'Banco': <Landmark className="h-5 w-5" />,
-    'Fatura': <Receipt className="h-5 w-5" />,
-    'Investimentos': <BadgeDollarSign className="h-5 w-5" />,
-    'Poupança': <PiggyBank className="h-5 w-5" />,
-    'Clube de Vantagens': <Gift className="h-5 w-5" />
+    'Desconto em Ingressos': <Ticket className="h-5 w-5" />,
+    'Pontuação por Jogo': <Trophy className="h-5 w-5" />,
+    'Setores Disponíveis': <Armchair className="h-5 w-5" />,
+    'Clube de Vantagens': <Gift className="h-5 w-5" />,
+    'Conteúdo Exclusivo': <Newspaper className="h-5 w-5" />,
+    'Sorteios Exclusivos': <Dice className="h-5 w-5" />,
+    'Rabiscadinhas': <Scan className="h-5 w-5" />,
+    'Visita ao Tour Memorial': <Building2 className="h-5 w-5" />,
+    'Visita ao Clube Social': <Stadium className="h-5 w-5" />,
+    'Resgate Exclusivo': <PackageCheck className="h-5 w-5" />,
+    '5% Desconto Poderoso Timão': <Store className="h-5 w-5" />,
+    '10% Desconto ShopTimão': <ShoppingCart className="h-5 w-5" />
   };
 
   // If value is 0, show a minus circle icon
