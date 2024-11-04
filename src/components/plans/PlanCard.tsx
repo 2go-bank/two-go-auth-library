@@ -54,7 +54,7 @@ const PlanCard = ({ plan }: PlanCardProps) => {
 
   return (
     <Card className="flex flex-col h-full">
-      <CardHeader>
+      <CardHeader className="flex-none h-32">
         <h3 className="text-2xl font-bold text-center">{plan.name}</h3>
         <p className="text-sm text-center text-muted-foreground">{plan.description}</p>
       </CardHeader>
@@ -89,7 +89,7 @@ const PlanCard = ({ plan }: PlanCardProps) => {
           </div>
         </div>
       </CardContent>
-      <CardFooter>
+      <CardFooter className="flex-none">
         <Button className="w-full">Escolher Plano</Button>
       </CardFooter>
     </Card>
