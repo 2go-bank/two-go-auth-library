@@ -29,7 +29,7 @@ const Header = () => {
           <img 
             src={logoUrl}
             alt="2GO Bank Logo" 
-            className="h-8 md:h-10"
+            className="h-[40%] md:h-[40%]" // Alterado para 40% do tamanho atual
           />
         </Link>
         <div className="flex items-center space-x-6">
