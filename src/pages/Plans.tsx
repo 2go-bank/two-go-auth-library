@@ -8,7 +8,14 @@ import { Plan, PlansResponse } from '@/types/user';
 const Plans = () => {
   const { data, isLoading, error } = useQuery<PlansResponse>({
     queryKey: ['plans'],
-    queryFn: () => apiService.plans.getPlans()
+    queryFn: async () => {
+      const response = await apiService.plans.getPlans();
+      return {
+        list: response.list || [],
+        pages: response.pages || {},
+        aggs: response.aggs || {}
+      };
+    }
   });
 
   const plans = data?.list || [];
