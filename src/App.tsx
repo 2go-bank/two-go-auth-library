@@ -71,7 +71,7 @@ const MainLayout = () => (
 
 const App = () => {
   const isPreview = window.location.hostname.includes('preview--');
-  const basename = isPreview ? '/preview' : '/';
+  const basename = isPreview ? '/preview/' : '/';
 
   useEffect(() => {
     initializeConfigs();
@@ -82,23 +82,8 @@ const App = () => {
       <Provider store={store}>
         <BrowserRouter basename={basename}>
           <Routes>
-            <Route path="/" element={<AuthLayout />}>
-              <Route index element={<Login />} />
-              <Route path="login" element={<Login />} />
-              <Route path="register" element={<Register />} />
-              <Route path="forgot-password" element={<ForgotPassword />} />
-              <Route path="validate-otp" element={<ValidateOTP />} />
-              <Route path="reset-password" element={<ResetPassword />} />
-            </Route>
-            <Route path="/app" element={<MainLayout />}>
-              <Route index element={<ProtectedRoute><Home /></ProtectedRoute>} />
-              <Route path="stats" element={<ProtectedRoute><Stats /></ProtectedRoute>} />
-              <Route path="settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-              <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-              <Route path="plans" element={<ProtectedRoute><Plans /></ProtectedRoute>} />
-              <Route path="checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
-            </Route>
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="/*" element={<AuthLayout />} />
+            <Route path="/app/*" element={<MainLayout />} />
           </Routes>
           <Toaster />
         </BrowserRouter>
