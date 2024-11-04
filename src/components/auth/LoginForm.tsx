@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff } from "lucide-react";
+import ReCAPTCHA from "react-google-recaptcha";
 
 interface LoginFormProps {
   onSubmit: (username: string, password: string) => Promise<void>;
@@ -13,10 +14,49 @@ const LoginForm = ({ onSubmit, isLoading }: LoginFormProps) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [showCaptcha, setShowCaptcha] = useState(false);
+  const [captchaValue, setCaptchaValue] = useState<string | null>(null);
+
+  useEffect(() => {
+    const lastFailedAttempt = localStorage.getItem('lastFailedLoginAttempt');
+    const failedAttempts = Number(localStorage.getItem('failedLoginAttempts') || '0');
+    
+    if (lastFailedAttempt && failedAttempts > 0) {
+      const lastAttemptTime = new Date(lastFailedAttempt).getTime();
+      const oneHourAgo = new Date().getTime() - (60 * 60 * 1000);
+      
+      if (lastAttemptTime > oneHourAgo && failedAttempts >= 1) {
+        setShowCaptcha(true);
+      } else if (lastAttemptTime < oneHourAgo) {
+        // Reset if more than 1 hour has passed
+        localStorage.removeItem('failedLoginAttempts');
+        localStorage.removeItem('lastFailedLoginAttempt');
+      }
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await onSubmit(username, password);
+    
+    if (showCaptcha && !captchaValue) {
+      return;
+    }
+
+    try {
+      await onSubmit(username, password);
+      // Reset failed attempts on successful login
+      localStorage.removeItem('failedLoginAttempts');
+      localStorage.removeItem('lastFailedLoginAttempt');
+    } catch (error) {
+      // Increment failed attempts
+      const currentAttempts = Number(localStorage.getItem('failedLoginAttempts') || '0');
+      localStorage.setItem('failedLoginAttempts', String(currentAttempts + 1));
+      localStorage.setItem('lastFailedLoginAttempt', new Date().toISOString());
+      
+      if (currentAttempts >= 0) {
+        setShowCaptcha(true);
+      }
+    }
   };
 
   return (
@@ -58,10 +98,19 @@ const LoginForm = ({ onSubmit, isLoading }: LoginFormProps) => {
         </div>
       </div>
 
+      {showCaptcha && (
+        <div className="flex justify-center my-4">
+          <ReCAPTCHA
+            sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY || ''}
+            onChange={(value) => setCaptchaValue(value)}
+          />
+        </div>
+      )}
+
       <Button 
         type="submit" 
         className="w-full bg-[#EFB207] hover:bg-[#EFB207]/90"
-        disabled={isLoading}
+        disabled={isLoading || (showCaptcha && !captchaValue)}
       >
         {isLoading ? 'Entrando...' : 'Entrar'}
       </Button>
