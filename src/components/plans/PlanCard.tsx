@@ -1,6 +1,7 @@
 import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { formatCurrency } from '@/utils/formatters';
+import { Plan } from '@/types/user';
 import { 
   CreditCard, 
   ShoppingBag, 
@@ -9,19 +10,12 @@ import {
   Landmark,
   Receipt,
   BadgeDollarSign,
-  PiggyBank
+  PiggyBank,
+  Gift
 } from 'lucide-react';
 
 interface PlanCardProps {
-  plan: {
-    id: string;
-    name: string;
-    products: Array<{
-      name: string;
-      description: string;
-      value: number;
-    }>;
-  };
+  plan: Plan;
 }
 
 const getIconForProduct = (productName: string) => {
@@ -33,10 +27,11 @@ const getIconForProduct = (productName: string) => {
     'Banco': <Landmark className="h-5 w-5" />,
     'Fatura': <Receipt className="h-5 w-5" />,
     'Investimentos': <BadgeDollarSign className="h-5 w-5" />,
-    'Poupança': <PiggyBank className="h-5 w-5" />
+    'Poupança': <PiggyBank className="h-5 w-5" />,
+    'Clube de Vantagens': <Gift className="h-5 w-5" />
   };
 
-  const defaultIcon = <CreditCard className="h-5 w-5" />;
+  const defaultIcon = <Gift className="h-5 w-5" />;
   return iconMap[productName] || defaultIcon;
 };
 
@@ -44,10 +39,13 @@ const PlanCard = ({ plan }: PlanCardProps) => {
   const monthlyTotal = plan.products.reduce((sum, product) => sum + product.value, 0);
   const yearlyTotal = monthlyTotal * 10;
 
+  const activeProducts = plan.products.filter(product => product.value > 0);
+
   return (
     <Card className="flex flex-col h-full">
       <CardHeader>
         <h3 className="text-2xl font-bold text-center">{plan.name}</h3>
+        <p className="text-sm text-center text-muted-foreground">{plan.description}</p>
       </CardHeader>
       <CardContent className="flex-grow">
         <div className="space-y-6">
@@ -56,7 +54,7 @@ const PlanCard = ({ plan }: PlanCardProps) => {
             <p className="text-sm text-muted-foreground">por mês</p>
           </div>
           <div className="space-y-2">
-            {plan.products.map((product, index) => (
+            {activeProducts.map((product, index) => (
               <div key={index} className="flex items-center gap-2 p-2 rounded-lg bg-secondary/10">
                 {getIconForProduct(product.name)}
                 <div>
