@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { formatCurrency } from '@/utils/formatters';
@@ -49,8 +50,13 @@ const getIconForProduct = (productName: string, value: number) => {
 };
 
 const PlanCard = ({ plan }: PlanCardProps) => {
+  const navigate = useNavigate();
   const monthlyTotal = plan.products.reduce((sum, product) => sum + product.value, 0);
   const yearlyTotal = monthlyTotal * 10;
+
+  const handleChoosePlan = () => {
+    navigate('/checkout', { state: { plan } });
+  };
 
   return (
     <Card className="flex flex-col h-full">
@@ -90,7 +96,9 @@ const PlanCard = ({ plan }: PlanCardProps) => {
         </div>
       </CardContent>
       <CardFooter className="flex-none">
-        <Button className="w-full">Escolher Plano</Button>
+        <Button className="w-full" onClick={handleChoosePlan}>
+          Escolher Plano
+        </Button>
       </CardFooter>
     </Card>
   );

@@ -18,6 +18,7 @@ const Settings = React.lazy(() => import('./pages/Settings'));
 const Profile = React.lazy(() => import('./pages/Profile'));
 const Home = React.lazy(() => import('./pages/Home'));
 const Plans = React.lazy(() => import('./pages/Plans'));
+const Checkout = React.lazy(() => import('./pages/Checkout'));
 
 const queryClient = new QueryClient();
 
@@ -57,6 +58,7 @@ const MainLayout = () => (
           <Route path="settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
           <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="plans" element={<ProtectedRoute><Plans /></ProtectedRoute>} />
+          <Route path="checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
         </Routes>
       </Suspense>
     </main>
@@ -90,6 +92,7 @@ const App = () => {
               <Route path="settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
               <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
               <Route path="plans" element={<ProtectedRoute><Plans /></ProtectedRoute>} />
+              <Route path="checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
             </Route>
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
