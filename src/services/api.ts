@@ -168,7 +168,6 @@ export const apiService = {
         method: 'GET',
         requiresAuth: true,
         queryParams: {
-          fields: 'id,name,created',
           sort: 'created:asc'
         }
       });
