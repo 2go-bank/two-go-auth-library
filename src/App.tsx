@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -7,6 +7,7 @@ import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import { Toaster } from '@/components/ui';
 import ProtectedRoute from './components/auth/ProtectedRoute';
+import { initializeConfigs } from './utils/colorConfig';
 
 const Login = React.lazy(() => import('./pages/Login'));
 const ForgotPassword = React.lazy(() => import('./pages/ForgotPassword'));
@@ -64,6 +65,10 @@ const MainLayout = () => (
 const App = () => {
   const isPreview = window.location.hostname.includes('preview--');
   const basename = isPreview ? '/preview' : '/';
+
+  useEffect(() => {
+    initializeConfigs();
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>

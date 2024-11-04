@@ -3,6 +3,11 @@ import { ColorGroup, EnvGroup } from '@/types/colors';
 const ENV_STORAGE_KEY = '2go-env-config';
 const COLOR_STORAGE_KEY = '2go-color-config';
 
+const getStoredValue = (key: string, defaultValue: any) => {
+  const stored = localStorage.getItem(key);
+  return stored ? JSON.parse(stored) : defaultValue;
+};
+
 export const getDefaultColors = (): ColorGroup[] => [
   {
     title: "Cores Gerais",
@@ -86,13 +91,11 @@ export const getDefaultEnvConfigs = (): EnvGroup[] => [
 ];
 
 export const loadStoredColors = (): ColorGroup[] => {
-  const stored = localStorage.getItem(COLOR_STORAGE_KEY);
-  return stored ? JSON.parse(stored) : getDefaultColors();
+  return getStoredValue(COLOR_STORAGE_KEY, getDefaultColors());
 };
 
 export const loadStoredEnvConfigs = (): EnvGroup[] => {
-  const stored = localStorage.getItem(ENV_STORAGE_KEY);
-  return stored ? JSON.parse(stored) : getDefaultEnvConfigs();
+  return getStoredValue(ENV_STORAGE_KEY, getDefaultEnvConfigs());
 };
 
 export const saveColors = (colors: ColorGroup[]) => {
@@ -119,15 +122,35 @@ export const applyEnvConfigs = (groups: EnvGroup[]) => {
     (window as any).env = {};
   }
   
-  groups.forEach(group => {
+  // Primeiro carregamos as configurações armazenadas
+  const storedConfigs = loadStoredEnvConfigs();
+  
+  // Aplicamos as configurações armazenadas ou as novas configurações
+  const configsToApply = groups || storedConfigs;
+  
+  configsToApply.forEach(group => {
     group.configs.forEach(config => {
       const cssVar = `--${config.key}`;
-      root.style.setProperty(cssVar, config.value);
-      // Update window.env with the new value
-      (window as any).env[config.key] = config.value;
+      const value = config.value || import.meta.env[config.key];
+      root.style.setProperty(cssVar, value);
+      (window as any).env[config.key] = value;
     });
   });
 
-  // Force a re-render of components that depend on window.env
+  // Salvamos as novas configurações se fornecidas
+  if (groups) {
+    saveEnvConfigs(groups);
+  }
+
+  // Forçamos a atualização dos componentes
   window.dispatchEvent(new Event('env-updated'));
+};
+
+// Função para inicializar as configurações na carga da aplicação
+export const initializeConfigs = () => {
+  const storedColors = loadStoredColors();
+  const storedEnvConfigs = loadStoredEnvConfigs();
+  
+  applyColors(storedColors);
+  applyEnvConfigs(storedEnvConfigs);
 };
