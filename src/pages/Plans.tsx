@@ -8,7 +8,7 @@ import { PlansResponse } from '@/types/user';
 const Plans = () => {
   const { data, isLoading, error } = useQuery<PlansResponse>({
     queryKey: ['plans'],
-    queryFn: () => apiService.plans.getPlans()
+    queryFn: apiService.plans.getPlans
   });
 
   const plans = data?.list || [];
