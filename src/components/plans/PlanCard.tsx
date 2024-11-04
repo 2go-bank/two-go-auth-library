@@ -11,14 +11,19 @@ import {
   Receipt,
   BadgeDollarSign,
   PiggyBank,
-  Gift
+  Gift,
+  CircleSlash,
+  MinusCircle,
+  CheckCircle,
+  Info
 } from 'lucide-react';
 
 interface PlanCardProps {
   plan: Plan;
 }
 
-const getIconForProduct = (productName: string) => {
+const getIconForProduct = (productName: string, value: number) => {
+  // Base icon mapping for product types
   const iconMap: Record<string, React.ReactNode> = {
     'Cartão': <CreditCard className="h-5 w-5" />,
     'Conta': <Wallet className="h-5 w-5" />,
@@ -31,15 +36,17 @@ const getIconForProduct = (productName: string) => {
     'Clube de Vantagens': <Gift className="h-5 w-5" />
   };
 
-  const defaultIcon = <Gift className="h-5 w-5" />;
-  return iconMap[productName] || defaultIcon;
+  // If value is 0, show a minus circle icon
+  if (value === 0) {
+    return <MinusCircle className="h-5 w-5 text-gray-400" />;
+  }
+
+  return iconMap[productName] || <Info className="h-5 w-5" />;
 };
 
 const PlanCard = ({ plan }: PlanCardProps) => {
   const monthlyTotal = plan.products.reduce((sum, product) => sum + product.value, 0);
   const yearlyTotal = monthlyTotal * 10;
-
-  const activeProducts = plan.products.filter(product => product.value > 0);
 
   return (
     <Card className="flex flex-col h-full">
@@ -54,12 +61,24 @@ const PlanCard = ({ plan }: PlanCardProps) => {
             <p className="text-sm text-muted-foreground">por mês</p>
           </div>
           <div className="space-y-2">
-            {activeProducts.map((product, index) => (
-              <div key={index} className="flex items-center gap-2 p-2 rounded-lg bg-secondary/10">
-                {getIconForProduct(product.name)}
+            {plan.products.map((product, index) => (
+              <div 
+                key={index} 
+                className={`flex items-center gap-2 p-2 rounded-lg ${
+                  product.value > 0 ? 'bg-secondary/10' : 'bg-gray-50'
+                }`}
+              >
+                {getIconForProduct(product.name, product.value)}
                 <div>
-                  <p className="font-medium">{product.name}</p>
+                  <p className={`font-medium ${product.value === 0 ? 'text-gray-500' : ''}`}>
+                    {product.name}
+                  </p>
                   <p className="text-sm text-muted-foreground">{product.description}</p>
+                  {product.value > 0 && (
+                    <p className="text-sm font-medium text-primary">
+                      {formatCurrency(product.value)}/mês
+                    </p>
+                  )}
                 </div>
               </div>
             ))}
