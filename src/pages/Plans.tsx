@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { apiService } from '@/services/api';
 import PlanCard from '@/components/plans/PlanCard';
-import { Loader2 } from 'lucide-react';
+import { Loader2, AlertCircle } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 const Plans = () => {
-  const { data: plans, isLoading } = useQuery({
+  const { data: plans, isLoading, error } = useQuery({
     queryKey: ['plans'],
     queryFn: apiService.plans.getPlans
   });
@@ -17,11 +18,33 @@ const Plans = () => {
     );
   }
 
+  if (error) {
+    return (
+      <Alert variant="destructive" className="max-w-2xl mx-auto">
+        <AlertCircle className="h-4 w-4" />
+        <AlertDescription>
+          Erro ao carregar os planos. Por favor, tente novamente mais tarde.
+        </AlertDescription>
+      </Alert>
+    );
+  }
+
+  if (!plans || !Array.isArray(plans) || plans.length === 0) {
+    return (
+      <Alert className="max-w-2xl mx-auto">
+        <AlertCircle className="h-4 w-4" />
+        <AlertDescription>
+          Nenhum plano disponível no momento.
+        </AlertDescription>
+      </Alert>
+    );
+  }
+
   return (
     <div className="container mx-auto py-8">
       <h1 className="text-3xl font-bold text-center mb-8">Nossos Planos</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {plans?.map((plan) => (
+        {plans.map((plan) => (
           <PlanCard key={plan.id} plan={plan} />
         ))}
       </div>
