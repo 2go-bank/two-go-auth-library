@@ -162,8 +162,8 @@ export const apiService = {
   },
 
   plans: {
-    getPlans: async (): Promise<PlansResponse> =>
-      api<Plan[]>({
+    getPlans: async (): Promise<PlansResponse> => {
+      const response = await api<Plan[]>({
         path: '/v3/api/tickets/plans',
         method: 'GET',
         requiresAuth: true,
@@ -171,6 +171,8 @@ export const apiService = {
           fields: 'id,name,created',
           sort: 'created:asc'
         }
-      }).then(response => ({ list: response }))
+      });
+      return { list: response };
+    }
   }
 };
