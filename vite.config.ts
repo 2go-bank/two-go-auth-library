@@ -1,6 +1,6 @@
-import { defineConfig } from 'vite'
+import {defineConfig} from 'vite'
 import react from '@vitejs/plugin-react'
-import { resolve } from 'path'
+import {resolve} from 'path'
 import dts from 'vite-plugin-dts'
 
 export default defineConfig({
@@ -19,6 +19,9 @@ export default defineConfig({
         },
         rollupOptions: {
             external: ['react', 'react-dom'],
+            input: {
+                main: resolve(__dirname, 'index.html'),
+            },
             output: {
                 globals: {
                     react: 'React',
