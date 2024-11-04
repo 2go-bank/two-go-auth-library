@@ -102,7 +102,7 @@ const LoginForm = ({ onSubmit, isLoading }: LoginFormProps) => {
         <div className="flex justify-center my-4">
           <ReCAPTCHA
             sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY || ''}
-            onChange={(value) => setCaptchaValue(value)}
+            onChange={(value: string | null) => setCaptchaValue(value)}
           />
         </div>
       )}
