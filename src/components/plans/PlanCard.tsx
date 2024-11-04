@@ -12,9 +12,7 @@ import {
   BadgeDollarSign,
   PiggyBank,
   Gift,
-  CircleSlash,
   MinusCircle,
-  CheckCircle,
   Info
 } from 'lucide-react';
 
@@ -74,11 +72,6 @@ const PlanCard = ({ plan }: PlanCardProps) => {
                     {product.name}
                   </p>
                   <p className="text-sm text-muted-foreground">{product.description}</p>
-                  {product.value > 0 && (
-                    <p className="text-sm font-medium text-primary">
-                      {formatCurrency(product.value)}/mês
-                    </p>
-                  )}
                 </div>
               </div>
             ))}
