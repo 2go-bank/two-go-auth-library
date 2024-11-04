@@ -3,9 +3,9 @@ import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { CreditCard, Scan, Building } from 'lucide-react';
-import CreditCardForm from './payment-forms/CreditCardForm';
-import PixForm from './payment-forms/PixForm';
-import DebitForm from './payment-forms/DebitForm';
+import CreditCardForm from './payment-methods/CreditCardForm';
+import PixForm from './payment-methods/PixForm';
+import DebitForm from './payment-methods/DebitForm';
 
 type PaymentMethod = 'credit' | 'pix' | 'debit';
 

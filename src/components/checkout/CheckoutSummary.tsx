@@ -1,5 +1,5 @@
 import { Plan } from '@/types/user';
-import { Card, CardHeader, CardContent } from '@/components/ui/card';
+import { CardHeader, CardContent } from '@/components/ui/card';
 import { formatCurrency } from '@/utils/formatters';
 
 interface CheckoutSummaryProps {
