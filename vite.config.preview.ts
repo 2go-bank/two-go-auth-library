@@ -11,6 +11,8 @@ export default defineConfig({
                 main: resolve(__dirname, 'index.html'),
             },
         },
+        // Garante que o index.html seja copiado para dist
+        copyPublicDir: true,
     },
     resolve: {
         alias: {
