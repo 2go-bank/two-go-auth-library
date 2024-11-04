@@ -5,10 +5,12 @@ import { Loader2, AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
 const Plans = () => {
-  const { data: plans, isLoading, error } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ['plans'],
     queryFn: apiService.plans.getPlans
   });
+
+  const plans = data?.list || [];
 
   if (isLoading) {
     return (
@@ -29,7 +31,7 @@ const Plans = () => {
     );
   }
 
-  if (!plans || !Array.isArray(plans) || plans.length === 0) {
+  if (!plans || plans.length === 0) {
     return (
       <Alert className="max-w-2xl mx-auto">
         <AlertCircle className="h-4 w-4" />
