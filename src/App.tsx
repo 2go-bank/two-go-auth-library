@@ -11,6 +11,7 @@ import { initializeConfigs } from './utils/colorConfig';
 
 // Lazy loaded components
 const Login = React.lazy(() => import('./pages/Login'));
+const Register = React.lazy(() => import('./pages/Register'));
 const ForgotPassword = React.lazy(() => import('./pages/ForgotPassword'));
 const ValidateOTP = React.lazy(() => import('./pages/ValidateOTP'));
 const ResetPassword = React.lazy(() => import('./pages/ResetPassword'));
@@ -39,6 +40,7 @@ const AuthLayout = () => (
         <Routes>
           <Route index element={<Login />} />
           <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
           <Route path="forgot-password" element={<ForgotPassword />} />
           <Route path="validate-otp" element={<ValidateOTP />} />
           <Route path="reset-password" element={<ResetPassword />} />
@@ -83,6 +85,7 @@ const App = () => {
             <Route path="/" element={<AuthLayout />}>
               <Route index element={<Login />} />
               <Route path="login" element={<Login />} />
+              <Route path="register" element={<Register />} />
               <Route path="forgot-password" element={<ForgotPassword />} />
               <Route path="validate-otp" element={<ValidateOTP />} />
               <Route path="reset-password" element={<ResetPassword />} />

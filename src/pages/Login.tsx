@@ -90,9 +90,12 @@ const Login = () => {
         
         <LoginForm onSubmit={handleLogin} isLoading={isLoading} />
 
-        <div className="text-center mt-4">
+        <div className="text-center mt-4 flex justify-between items-center">
           <Link to="/forgot-password" className="text-[#EFB207] hover:underline">
-            Esqueci minha senha
+            Recuperar senha
+          </Link>
+          <Link to="/register" className="text-[#EFB207] hover:underline">
+            Cadastre-se
           </Link>
         </div>
       </div>
