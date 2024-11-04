@@ -11,9 +11,7 @@ const Plans = () => {
     queryFn: async () => {
       const response = await apiService.plans.getPlans();
       return {
-        list: response.list || [],
-        pages: response.pages || {},
-        aggs: response.aggs || {}
+        list: response.list || []
       };
     }
   });
