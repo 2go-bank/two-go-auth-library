@@ -154,5 +154,27 @@ export const apiService = {
           fields: 'id,name,avatar,email,phone_number'
         }
       })
+  },
+
+  plans: {
+    getPlans: () =>
+      api<{
+        id: string;
+        name: string;
+        created: string;
+        products: Array<{
+          name: string;
+          description: string;
+          value: number;
+        }>;
+      }[]>({
+        path: '/v3/api/tickets/plans',
+        method: 'GET',
+        requiresAuth: true,
+        queryParams: {
+          fields: 'id,name,created',
+          sort: 'created:asc'
+        }
+      })
   }
 };

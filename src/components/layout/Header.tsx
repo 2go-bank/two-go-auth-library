@@ -55,6 +55,15 @@ const Header = () => {
                       Stats
                     </Link>
                   </li>
+                  <li>
+                    <Link 
+                      to="/app/plans" 
+                      style={{ color: headerLinkColor }}
+                      className="hover:opacity-80 transition-colors"
+                    >
+                      Planos
+                    </Link>
+                  </li>
                 </>
               ) : (
                 <li>
