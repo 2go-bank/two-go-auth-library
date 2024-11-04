@@ -4,10 +4,12 @@ import CheckoutSummary from '@/components/checkout/CheckoutSummary';
 import BuyerForm from '@/components/checkout/BuyerForm';
 import PaymentMethods from '@/components/checkout/PaymentMethods';
 import { Card } from '@/components/ui/card';
+import { useState } from 'react';
 
 const Checkout = () => {
   const location = useLocation();
   const plan = location.state?.plan as Plan;
+  const [billingCycle, setBillingCycle] = useState<'yearly' | 'monthly'>('yearly');
 
   if (!plan) {
     return (
@@ -24,11 +26,14 @@ const Checkout = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
           <BuyerForm />
-          <PaymentMethods />
+          <PaymentMethods billingCycle={billingCycle} />
         </div>
         <div className="lg:col-span-1">
           <Card className="sticky top-4">
-            <CheckoutSummary plan={plan} />
+            <CheckoutSummary 
+              plan={plan} 
+              onBillingCycleChange={(cycle) => setBillingCycle(cycle)} 
+            />
           </Card>
         </div>
       </div>

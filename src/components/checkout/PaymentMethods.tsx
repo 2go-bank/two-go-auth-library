@@ -1,16 +1,26 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
-import { CreditCard, Scan, Building } from 'lucide-react';
+import { CreditCard, Scan } from 'lucide-react';
 import CreditCardForm from './payment-methods/CreditCardForm';
 import PixForm from './payment-methods/PixForm';
-import DebitForm from './payment-methods/DebitForm';
 
-type PaymentMethod = 'credit' | 'pix' | 'debit';
+type PaymentMethod = 'credit' | 'pix';
 
-const PaymentMethods = () => {
+interface PaymentMethodsProps {
+  billingCycle: 'yearly' | 'monthly';
+}
+
+const PaymentMethods = ({ billingCycle }: PaymentMethodsProps) => {
   const [method, setMethod] = useState<PaymentMethod>('credit');
+
+  // Reset to credit card if monthly plan is selected
+  useEffect(() => {
+    if (billingCycle === 'monthly') {
+      setMethod('credit');
+    }
+  }, [billingCycle]);
 
   return (
     <Card>
@@ -21,7 +31,7 @@ const PaymentMethods = () => {
         <RadioGroup
           value={method}
           onValueChange={(value) => setMethod(value as PaymentMethod)}
-          className="grid grid-cols-1 md:grid-cols-3 gap-4"
+          className="grid grid-cols-1 md:grid-cols-2 gap-4"
         >
           <div>
             <RadioGroupItem value="credit" id="credit" className="peer sr-only" />
@@ -33,32 +43,23 @@ const PaymentMethods = () => {
               <span>Cartão de Crédito</span>
             </Label>
           </div>
-          <div>
-            <RadioGroupItem value="pix" id="pix" className="peer sr-only" />
-            <Label
-              htmlFor="pix"
-              className="flex flex-col items-center justify-center p-4 border rounded-lg cursor-pointer peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5"
-            >
-              <Scan className="h-6 w-6 mb-2" />
-              <span>PIX</span>
-            </Label>
-          </div>
-          <div>
-            <RadioGroupItem value="debit" id="debit" className="peer sr-only" />
-            <Label
-              htmlFor="debit"
-              className="flex flex-col items-center justify-center p-4 border rounded-lg cursor-pointer peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5"
-            >
-              <Building className="h-6 w-6 mb-2" />
-              <span>Débito em Conta</span>
-            </Label>
-          </div>
+          {billingCycle === 'yearly' && (
+            <div>
+              <RadioGroupItem value="pix" id="pix" className="peer sr-only" />
+              <Label
+                htmlFor="pix"
+                className="flex flex-col items-center justify-center p-4 border rounded-lg cursor-pointer peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5"
+              >
+                <Scan className="h-6 w-6 mb-2" />
+                <span>PIX</span>
+              </Label>
+            </div>
+          )}
         </RadioGroup>
 
         <div className="mt-6">
           {method === 'credit' && <CreditCardForm />}
           {method === 'pix' && <PixForm />}
-          {method === 'debit' && <DebitForm />}
         </div>
       </CardContent>
     </Card>

@@ -7,14 +7,21 @@ import { formatCurrency } from '@/utils/formatters';
 
 interface CheckoutSummaryProps {
   plan: Plan;
+  onBillingCycleChange: (cycle: 'yearly' | 'monthly') => void;
 }
 
-const CheckoutSummary = ({ plan }: CheckoutSummaryProps) => {
+const CheckoutSummary = ({ plan, onBillingCycleChange }: CheckoutSummaryProps) => {
   const [billingCycle, setBillingCycle] = useState<'yearly' | 'monthly'>('yearly');
   const monthlyTotal = plan.products.reduce((sum, product) => sum + product.value, 0);
   const yearlyTotal = monthlyTotal * 10; // 2 months free in yearly plan
 
   const total = billingCycle === 'yearly' ? yearlyTotal : monthlyTotal;
+
+  const handleBillingCycleChange = (value: string) => {
+    const cycle = value as 'yearly' | 'monthly';
+    setBillingCycle(cycle);
+    onBillingCycleChange(cycle);
+  };
 
   return (
     <>
@@ -32,7 +39,7 @@ const CheckoutSummary = ({ plan }: CheckoutSummaryProps) => {
           <RadioGroup
             defaultValue="yearly"
             value={billingCycle}
-            onValueChange={(value) => setBillingCycle(value as 'yearly' | 'monthly')}
+            onValueChange={handleBillingCycleChange}
             className="space-y-2"
           >
             <div className="flex items-center space-x-2">
