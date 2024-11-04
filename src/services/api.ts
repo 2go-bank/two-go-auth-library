@@ -158,16 +158,7 @@ export const apiService = {
 
   plans: {
     getPlans: () =>
-      api<{
-        id: string;
-        name: string;
-        created: string;
-        products: Array<{
-          name: string;
-          description: string;
-          value: number;
-        }>;
-      }[]>({
+      api<PlansResponse>({
         path: '/v3/api/tickets/plans',
         method: 'GET',
         requiresAuth: true,
@@ -175,6 +166,6 @@ export const apiService = {
           fields: 'id,name,created',
           sort: 'created:asc'
         }
-      })
+      }).then(response => ({ list: response }))
   }
 };
