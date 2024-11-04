@@ -10,11 +10,14 @@ export default defineConfig({
             input: {
                 main: resolve(__dirname, 'index.html'),
             },
-            external: ['react', 'react-dom'],
+            external: ['react', 'react-dom', 'firebase/app', 'firebase/messaging', 'react-google-recaptcha'],
             output: {
                 globals: {
                     react: 'React',
-                    'react-dom': 'ReactDOM'
+                    'react-dom': 'ReactDOM',
+                    'firebase/app': 'firebase',
+                    'firebase/messaging': 'firebaseMessaging',
+                    'react-google-recaptcha': 'ReCAPTCHA'
                 }
             }
         },
