@@ -162,8 +162,8 @@ export const apiService = {
   },
 
   plans: {
-    getPlans: () =>
-      api<PlansResponse>({
+    getPlans: async (): Promise<PlansResponse> =>
+      api<Plan[]>({
         path: '/v3/api/tickets/plans',
         method: 'GET',
         requiresAuth: true,
