@@ -1,4 +1,9 @@
 import CryptoJS from 'crypto-js';
+import { Plan } from '@/types/user';
+
+interface PlansResponse {
+  list: Plan[];
+}
 
 interface RequestConfig {
   path: string;
