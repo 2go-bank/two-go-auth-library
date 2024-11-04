@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { validateCPF, validateBirthDate, validatePhone, formatCPF, formatPhone } from '@/utils/validations';
 
 const Register = () => {
   const [cpf, setCpf] = useState('');
@@ -13,75 +14,18 @@ const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
-  const validateCPF = (cpf: string) => {
-    const cleanCPF = cpf.replace(/\D/g, '');
-    
-    if (cleanCPF.length !== 11) return false;
-    
-    if (/^(\d)\1{10}$/.test(cleanCPF)) return false;
-    
-    let sum = 0;
-    for (let i = 0; i < 9; i++) {
-      sum += parseInt(cleanCPF.charAt(i)) * (10 - i);
-    }
-    let digit = 11 - (sum % 11);
-    if (digit >= 10) digit = 0;
-    if (digit !== parseInt(cleanCPF.charAt(9))) return false;
-    
-    sum = 0;
-    for (let i = 0; i < 10; i++) {
-      sum += parseInt(cleanCPF.charAt(i)) * (11 - i);
-    }
-    digit = 11 - (sum % 11);
-    if (digit >= 10) digit = 0;
-    if (digit !== parseInt(cleanCPF.charAt(10))) return false;
-    
-    return true;
-  };
-
-  const formatCPF = (value: string) => {
-    const numbers = value.replace(/\D/g, '');
-    if (numbers.length > 11) return cpf;
-    return numbers.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/g, '$1.$2.$3-$4');
-  };
-
-  const formatPhone = (value: string) => {
-    const numbers = value.replace(/\D/g, '');
-    if (numbers.length > 11) return phone;
-    if (numbers.length <= 11) {
-      return numbers.replace(/(\d{2})(\d{5})(\d{4})/g, '($1) $2-$3');
-    }
-    return value;
-  };
-
-  const validatePhone = (phone: string) => {
-    const cleanPhone = phone.replace(/\D/g, '');
-    return /^[1-9]{2}[9]\d{8}$/.test(cleanPhone);
-  };
-
-  const validateBirthDate = (date: string) => {
-    const birthDate = new Date(date);
-    const minDate = new Date('1930-01-01');
-    const today = new Date();
-    
-    return birthDate >= minDate && birthDate <= today;
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const newErrors: { [key: string]: string } = {};
 
-    // Validate CPF
     if (!validateCPF(cpf)) {
       newErrors.cpf = 'CPF inválido';
     }
 
-    // Validate Birth Date
     if (!validateBirthDate(birthDate)) {
-      newErrors.birthDate = 'Data de nascimento inválida. Deve ser posterior a 1930';
+      newErrors.birthDate = 'Data de nascimento inválida';
     }
 
-    // Validate Phone
     if (!validatePhone(phone)) {
       newErrors.phone = 'Telefone inválido. Use o formato (99) 99999-9999';
     }
@@ -101,7 +45,6 @@ const Register = () => {
     setIsLoading(true);
 
     try {
-      // Here you would implement the registration logic
       toast({
         title: "Registro em desenvolvimento",
         description: "Esta funcionalidade será implementada em breve.",
@@ -137,7 +80,7 @@ const Register = () => {
               id="cpf"
               type="text"
               value={cpf}
-              onChange={(e) => setCpf(formatCPF(e.target.value))}
+              onChange={(e) => setCpf(formatCPF(e.target.value, cpf))}
               placeholder="000.000.000-00"
               className={`bg-white/10 border-gray-700 text-white placeholder:text-gray-400 ${
                 errors.cpf ? 'border-red-500' : ''
@@ -177,7 +120,7 @@ const Register = () => {
               id="phone"
               type="text"
               value={phone}
-              onChange={(e) => setPhone(formatPhone(e.target.value))}
+              onChange={(e) => setPhone(formatPhone(e.target.value, phone))}
               placeholder="(00) 00000-0000"
               className={`bg-white/10 border-gray-700 text-white placeholder:text-gray-400 ${
                 errors.phone ? 'border-red-500' : ''
