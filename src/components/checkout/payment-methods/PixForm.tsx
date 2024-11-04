@@ -1,5 +1,5 @@
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import pixLogo from '@/assets/images/pix-logo.png'; // Importando a imagem da logo do PIX
+import { QrCode } from 'lucide-react';
 
 const PixForm = () => {
   return (
@@ -12,7 +12,7 @@ const PixForm = () => {
 
       <div className="text-center">
         <div className="flex flex-col items-center justify-center p-8 border-2 border-dashed rounded-lg">
-          <img src={pixLogo} alt="Logo do PIX" className="h-32 w-32 mb-4" /> {/* Usando a logo do PIX */}
+          <QrCode className="h-32 w-32 mb-4 text-primary" />
           <p className="text-sm text-muted-foreground">
             Escaneie o QR Code acima com o seu aplicativo de pagamento
           </p>
