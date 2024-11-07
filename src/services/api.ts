@@ -1,6 +1,8 @@
 import CryptoJS from 'crypto-js';
 import { Plan } from '@/types/user';
+import { toast } from '@/components/ui/use-toast';
 
+// Tipos
 interface PlansResponse {
   list: Plan[];
 }
@@ -13,6 +15,7 @@ interface RequestConfig {
   queryParams?: Record<string, string>;
 }
 
+// Funções auxiliares
 const getStoredToken = (): string | null => {
   const encryptedAuth = localStorage.getItem('2go-auth');
   if (!encryptedAuth) return null;
@@ -27,6 +30,33 @@ const getStoredToken = (): string | null => {
   }
 };
 
+const handleApiError = (error: any) => {
+  if (error instanceof Error) {
+    if (error.message === 'Unauthorized: Invalid credentials') {
+      toast({
+        variant: "destructive",
+        title: "Erro",
+        description: "Sua sessão expirou. Por favor, faça login novamente."
+      });
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Erro",
+        description: error.message || "Ocorreu um erro ao processar sua requisição."
+      });
+    }
+    throw error;
+  }
+  
+  toast({
+    variant: "destructive",
+    title: "Erro",
+    description: "Ocorreu um erro ao processar sua requisição."
+  });
+  throw new Error('Network request failed');
+};
+
+// Função principal da API
 export const api = async <T>({
   path,
   method = 'GET',
@@ -71,13 +101,11 @@ export const api = async <T>({
 
     return response.json();
   } catch (error) {
-    if (error instanceof Error) {
-      throw error;
-    }
-    throw new Error('Network request failed');
+    return handleApiError(error);
   }
 };
 
+// Serviços específicos
 export const apiService = {
   auth: {
     login: async (username: string, password: string) => {
@@ -106,10 +134,7 @@ export const apiService = {
 
         return response.json();
       } catch (error) {
-        if (error instanceof Error) {
-          throw error;
-        }
-        throw new Error('Erro ao realizar login');
+        return handleApiError(error);
       }
     },
     
@@ -163,48 +188,93 @@ export const apiService = {
 
   plans: {
     getPlans: async (): Promise<PlansResponse> => {
-      return api<PlansResponse>({
-        path: '/v3/api/tickets/plans',
-        method: 'GET',
-        requiresAuth: true,
-        queryParams: {
-          sort: 'created:asc'
-        }
-      });
+      try {
+        return await api<PlansResponse>({
+          path: '/v3/api/tickets/plans',
+          method: 'GET',
+          requiresAuth: true,
+          queryParams: {
+            sort: 'created:asc'
+          }
+        });
+      } catch (error) {
+        toast({
+          variant: "destructive",
+          title: "Erro",
+          description: "Não foi possível carregar seus produtos"
+        });
+        throw error;
+      }
     },
 
     getPlan: async (id: string): Promise<Plan> => {
-      return api<Plan>({
-        path: `/v3/api/tickets/plans/${id}`,
-        method: 'GET',
-        requiresAuth: true
-      });
+      try {
+        return await api<Plan>({
+          path: `/v3/api/tickets/plans/${id}`,
+          method: 'GET',
+          requiresAuth: true
+        });
+      } catch (error) {
+        toast({
+          variant: "destructive",
+          title: "Erro",
+          description: "Não foi possível carregar o plano"
+        });
+        throw error;
+      }
     },
 
     createPlan: async (plan: Omit<Plan, 'id'>): Promise<Plan> => {
-      return api<Plan>({
-        path: '/v3/api/tickets/plans',
-        method: 'POST',
-        body: plan,
-        requiresAuth: true
-      });
+      try {
+        return await api<Plan>({
+          path: '/v3/api/tickets/plans',
+          method: 'POST',
+          body: plan,
+          requiresAuth: true
+        });
+      } catch (error) {
+        toast({
+          variant: "destructive",
+          title: "Erro",
+          description: "Não foi possível criar o plano"
+        });
+        throw error;
+      }
     },
 
     updatePlan: async (id: string, plan: Partial<Plan>): Promise<Plan> => {
-      return api<Plan>({
-        path: `/v3/api/tickets/plans/${id}`,
-        method: 'PUT',
-        body: plan,
-        requiresAuth: true
-      });
+      try {
+        return await api<Plan>({
+          path: `/v3/api/tickets/plans/${id}`,
+          method: 'PUT',
+          body: plan,
+          requiresAuth: true
+        });
+      } catch (error) {
+        toast({
+          variant: "destructive",
+          title: "Erro",
+          description: "Não foi possível atualizar o plano"
+        });
+        throw error;
+      }
     },
 
     deletePlan: async (id: string): Promise<void> => {
-      return api<void>({
-        path: `/v3/api/tickets/plans/${id}`,
-        method: 'DELETE',
-        requiresAuth: true
-      });
+      try {
+        return await api<void>({
+          path: `/v3/api/tickets/plans/${id}`,
+          method: 'DELETE',
+          requiresAuth: true
+        });
+      } catch (error) {
+        toast({
+          variant: "destructive",
+          title: "Erro",
+          description: "Não foi possível excluir o plano"
+        });
+        throw error;
+      }
     }
   }
 };
