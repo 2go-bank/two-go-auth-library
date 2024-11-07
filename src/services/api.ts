@@ -163,7 +163,7 @@ export const apiService = {
 
   plans: {
     getPlans: async (): Promise<PlansResponse> => {
-      const response = await api<PlansResponse>({
+      return api<PlansResponse>({
         path: '/v3/api/tickets/plans',
         method: 'GET',
         requiresAuth: true,
@@ -171,7 +171,40 @@ export const apiService = {
           sort: 'created:asc'
         }
       });
-      return response;
+    },
+
+    getPlan: async (id: string): Promise<Plan> => {
+      return api<Plan>({
+        path: `/v3/api/tickets/plans/${id}`,
+        method: 'GET',
+        requiresAuth: true
+      });
+    },
+
+    createPlan: async (plan: Omit<Plan, 'id'>): Promise<Plan> => {
+      return api<Plan>({
+        path: '/v3/api/tickets/plans',
+        method: 'POST',
+        body: plan,
+        requiresAuth: true
+      });
+    },
+
+    updatePlan: async (id: string, plan: Partial<Plan>): Promise<Plan> => {
+      return api<Plan>({
+        path: `/v3/api/tickets/plans/${id}`,
+        method: 'PUT',
+        body: plan,
+        requiresAuth: true
+      });
+    },
+
+    deletePlan: async (id: string): Promise<void> => {
+      return api<void>({
+        path: `/v3/api/tickets/plans/${id}`,
+        method: 'DELETE',
+        requiresAuth: true
+      });
     }
   }
 };

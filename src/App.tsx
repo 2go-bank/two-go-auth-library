@@ -21,6 +21,8 @@ const Profile = React.lazy(() => import('./pages/Profile'));
 const Home = React.lazy(() => import('./pages/Home'));
 const Plans = React.lazy(() => import('./pages/Plans'));
 const Checkout = React.lazy(() => import('./pages/Checkout'));
+const AdminPlansList = React.lazy(() => import('./pages/admin/PlansList'));
+const AdminPlanForm = React.lazy(() => import('./pages/admin/PlanForm'));
 
 const queryClient = new QueryClient();
 
@@ -62,6 +64,9 @@ const MainLayout = () => (
           <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="plans" element={<ProtectedRoute><Plans /></ProtectedRoute>} />
           <Route path="checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
+          <Route path="admin/plans" element={<ProtectedRoute><AdminPlansList /></ProtectedRoute>} />
+          <Route path="admin/plans/new" element={<ProtectedRoute><AdminPlanForm /></ProtectedRoute>} />
+          <Route path="admin/plans/:id" element={<ProtectedRoute><AdminPlanForm /></ProtectedRoute>} />
         </Routes>
       </Suspense>
     </main>
