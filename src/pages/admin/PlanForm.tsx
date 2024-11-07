@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
@@ -10,7 +11,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Loader2, ArrowLeft } from 'lucide-react';
 import { apiService } from '@/services/api';
 import { useToast } from '@/components/ui/use-toast';
-import type { Plan, Product } from '@/types/user';
+import type { Product } from '@/types/user';
 
 const defaultProduct: Product = {
   type: 'voucher',

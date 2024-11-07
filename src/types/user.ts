@@ -7,7 +7,7 @@ export interface User {
 }
 
 export interface Product {
-  type: string;
+  type: 'voucher';
   name: string;
   description: string;
   thumbnail: string | null;
@@ -22,7 +22,7 @@ export interface Plan {
   name: string;
   description: string;
   products: Product[];
-  status: string;
+  status: 'active' | 'inactive';
   created: string;
 }
 
