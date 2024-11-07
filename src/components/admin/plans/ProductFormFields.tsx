@@ -29,6 +29,31 @@ export const ProductFormFields = ({ index, form, onRemove }: ProductFormFieldsPr
     field.onChange(field.value.filter((tag: string) => tag !== tagToRemove));
   };
 
+  const formatCurrency = (value: number): string => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    }).format(value);
+  };
+
+  const parseCurrencyInput = (value: string): number => {
+    // Remove currency symbol, dots and convert comma to dot for parsing
+    const numericValue = value.replace(/[R$\s.]/g, '').replace(',', '.');
+    return parseFloat(numericValue) || 0;
+  };
+
+  const handleCurrencyInput = (e: React.ChangeEvent<HTMLInputElement>, field: any) => {
+    const inputValue = e.target.value.replace(/[^0-9,]/g, '');
+    
+    if (inputValue === '') {
+      field.onChange(0);
+      return;
+    }
+
+    const numericValue = parseCurrencyInput(inputValue);
+    field.onChange(numericValue);
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
@@ -97,11 +122,9 @@ export const ProductFormFields = ({ index, form, onRemove }: ProductFormFieldsPr
               <FormLabel>Valor</FormLabel>
               <FormControl>
                 <Input 
-                  type="number" 
-                  min="0" 
-                  step="0.01"
-                  onChange={e => field.onChange(parseFloat(e.target.value))}
-                  value={field.value}
+                  value={formatCurrency(field.value)}
+                  onChange={(e) => handleCurrencyInput(e, field)}
+                  placeholder="R$ 0,00"
                 />
               </FormControl>
               <FormMessage />
