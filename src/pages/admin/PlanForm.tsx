@@ -1,4 +1,3 @@
-import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
@@ -9,17 +8,33 @@ import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Loader2, ArrowLeft } from 'lucide-react';
-import { Alert, AlertDescription } from '@/components/ui/alert';
 import { apiService } from '@/services/api';
 import { useToast } from '@/components/ui/use-toast';
+import type { Plan, Product } from '@/types/user';
+
+const defaultProduct: Product = {
+  type: 'default',
+  name: '',
+  description: '',
+  thumbnail: null,
+  sku: '',
+  value: 0,
+  quantity: 1,
+  coverage: []
+};
 
 const planFormSchema = z.object({
   name: z.string().min(1, 'Nome é obrigatório'),
   description: z.string().min(1, 'Descrição é obrigatória'),
   products: z.array(z.object({
+    type: z.string(),
     name: z.string(),
     description: z.string(),
-    value: z.number()
+    thumbnail: z.string().nullable(),
+    sku: z.string(),
+    value: z.number(),
+    quantity: z.number(),
+    coverage: z.array(z.string())
   }))
 });
 
@@ -43,12 +58,16 @@ const PlanForm = () => {
     defaultValues: plan || {
       name: '',
       description: '',
-      products: []
+      products: [defaultProduct]
     }
   });
 
   const createMutation = useMutation({
-    mutationFn: (data: PlanFormValues) => apiService.plans.createPlan(data),
+    mutationFn: (data: PlanFormValues) => apiService.plans.createPlan({
+      ...data,
+      status: 'active',
+      created: new Date().toISOString()
+    }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['plans'] });
       toast({
@@ -67,7 +86,11 @@ const PlanForm = () => {
   });
 
   const updateMutation = useMutation({
-    mutationFn: (data: PlanFormValues) => apiService.plans.updatePlan(id!, data),
+    mutationFn: (data: PlanFormValues) => apiService.plans.updatePlan(id!, {
+      ...data,
+      status: plan?.status || 'active',
+      created: plan?.created || new Date().toISOString()
+    }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['plans'] });
       toast({
