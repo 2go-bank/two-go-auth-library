@@ -16,16 +16,15 @@ export const ProductAccordionItem = ({ index, form, onRemove }: ProductAccordion
 
   const handleAccordionTrigger = () => {
     // Quando o accordion é aberto, armazena os valores atuais
-    setAccordionValues(form.watch(`products.${index}`));
-    // Reseta o estado de modificação
-    setIsModified(false);
+    const currentValues = form.watch(`products.${index}`);
+    setAccordionValues(JSON.stringify(currentValues));
   };
 
   const handleModified = () => {
-    // Só verifica modificações se o accordion já foi aberto
+    // Verifica modificações se o accordion já foi aberto
     if (accordionValues) {
       const currentValues = form.watch(`products.${index}`);
-      const hasChanged = JSON.stringify(currentValues) !== JSON.stringify(accordionValues);
+      const hasChanged = JSON.stringify(currentValues) !== accordionValues;
       setIsModified(hasChanged);
     }
   };
