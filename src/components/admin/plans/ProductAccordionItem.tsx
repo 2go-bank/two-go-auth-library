@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import { ProductFormFields } from './ProductFormFields';
 import { UseFormReturn } from 'react-hook-form';
@@ -12,17 +12,22 @@ interface ProductAccordionItemProps {
 
 export const ProductAccordionItem = ({ index, form, onRemove }: ProductAccordionItemProps) => {
   const [isModified, setIsModified] = useState(false);
-  const [initialValues, setInitialValues] = useState(form.watch(`products.${index}`));
+  const [accordionValues, setAccordionValues] = useState<any>(null);
 
-  useEffect(() => {
-    // Armazena os valores iniciais quando o componente é montado
-    setInitialValues(form.watch(`products.${index}`));
-  }, []);
+  const handleAccordionTrigger = () => {
+    // Quando o accordion é aberto, armazena os valores atuais
+    setAccordionValues(form.watch(`products.${index}`));
+    // Reseta o estado de modificação
+    setIsModified(false);
+  };
 
   const handleModified = () => {
-    const currentValues = form.watch(`products.${index}`);
-    const hasChanged = JSON.stringify(currentValues) !== JSON.stringify(initialValues);
-    setIsModified(hasChanged);
+    // Só verifica modificações se o accordion já foi aberto
+    if (accordionValues) {
+      const currentValues = form.watch(`products.${index}`);
+      const hasChanged = JSON.stringify(currentValues) !== JSON.stringify(accordionValues);
+      setIsModified(hasChanged);
+    }
   };
 
   return (
@@ -30,7 +35,7 @@ export const ProductAccordionItem = ({ index, form, onRemove }: ProductAccordion
       value={`item-${index}`} 
       className={`border rounded-lg ${isModified ? 'bg-yellow-50' : 'bg-white'}`}
     >
-      <AccordionTrigger className="px-4">
+      <AccordionTrigger className="px-4" onClick={handleAccordionTrigger}>
         {form.watch(`products.${index}.name`) || `Produto ${index + 1}`}
       </AccordionTrigger>
       <AccordionContent className="px-4">
