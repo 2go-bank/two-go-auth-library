@@ -4,15 +4,15 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Loader2, ArrowLeft, Plus } from 'lucide-react';
+import { Form } from '@/components/ui/form';
+import { Accordion } from '@/components/ui/accordion';
+import { Loader2, Plus } from 'lucide-react';
 import { apiService } from '@/services/api';
 import { useToast } from '@/components/ui/use-toast';
-import { ProductFormFields } from '@/components/admin/plans/ProductFormFields';
 import { planFormSchema, type PlanFormValues } from '@/components/admin/plans/PlanForm.types';
+import { PlanFormHeader } from '@/components/admin/plans/PlanFormHeader';
+import { PlanFormFields } from '@/components/admin/plans/PlanFormFields';
+import { ProductAccordionItem } from '@/components/admin/plans/ProductAccordionItem';
 
 const defaultProduct = {
   type: 'voucher' as const,
@@ -122,50 +122,11 @@ const PlanForm = () => {
 
   return (
     <div className="container max-w-3xl mx-auto py-8">
-      <Button
-        variant="ghost"
-        onClick={() => navigate('/app/admin/plans')}
-        className="mb-6"
-      >
-        <ArrowLeft className="h-4 w-4 mr-2" />
-        Voltar
-      </Button>
-
-      <h1 className="text-2xl font-bold mb-6">
-        {isEditing ? 'Editar Plano' : 'Novo Plano'}
-      </h1>
+      <PlanFormHeader isEditing={isEditing} />
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div className="grid grid-cols-1 gap-6">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Nome</FormLabel>
-                  <FormControl>
-                    <Input {...field} maxLength={100} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Descrição</FormLabel>
-                  <FormControl>
-                    <Textarea {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+          <PlanFormFields form={form} />
 
           <div className="space-y-4">
             <div className="flex items-center justify-between">
@@ -182,18 +143,12 @@ const PlanForm = () => {
 
             <Accordion type="single" collapsible className="w-full space-y-4">
               {fields.map((field, index) => (
-                <AccordionItem key={field.id} value={`item-${index}`} className="border rounded-lg">
-                  <AccordionTrigger className="px-4">
-                    {form.watch(`products.${index}.name`) || `Produto ${index + 1}`}
-                  </AccordionTrigger>
-                  <AccordionContent className="px-4">
-                    <ProductFormFields
-                      index={index}
-                      form={form}
-                      onRemove={() => remove(index)}
-                    />
-                  </AccordionContent>
-                </AccordionItem>
+                <ProductAccordionItem
+                  key={field.id}
+                  index={index}
+                  form={form}
+                  onRemove={() => remove(index)}
+                />
               ))}
             </Accordion>
           </div>

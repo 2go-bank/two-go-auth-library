@@ -6,28 +6,26 @@ import { Trash2 } from 'lucide-react';
 import { UseFormReturn, useWatch } from 'react-hook-form';
 import { CurrencyInput } from './CurrencyInput';
 import { CoverageTags } from './CoverageTags';
-import { useEffect, useState } from 'react';
 import type { PlanFormValues } from './PlanForm.types';
 
 interface ProductFormFieldsProps {
   index: number;
   form: UseFormReturn<PlanFormValues>;
   onRemove: () => void;
+  onModified: (isModified: boolean) => void;
 }
 
-export const ProductFormFields = ({ index, form, onRemove }: ProductFormFieldsProps) => {
-  const [isModified, setIsModified] = useState(false);
-  
+export const ProductFormFields = ({ index, form, onRemove, onModified }: ProductFormFieldsProps) => {
   // Watch all fields of this product
   const product = useWatch({
     control: form.control,
     name: `products.${index}`
   });
 
-  // Update isModified when any field changes
+  // Update parent when any field changes
   useEffect(() => {
-    setIsModified(true);
-  }, [product]);
+    onModified(true);
+  }, [product, onModified]);
 
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>, field: any) => {
     const value = e.target.value;
@@ -43,7 +41,7 @@ export const ProductFormFields = ({ index, form, onRemove }: ProductFormFieldsPr
   };
 
   return (
-    <div className={`space-y-4 p-4 rounded-lg transition-colors ${isModified ? 'bg-yellow-50' : ''}`}>
+    <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h3 className="font-medium">Produto {index + 1}</h3>
         <Button
