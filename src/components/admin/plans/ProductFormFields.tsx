@@ -2,7 +2,8 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/comp
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { Trash2 } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Trash2, X } from 'lucide-react';
 import { UseFormReturn } from 'react-hook-form';
 import type { PlanFormValues } from './PlanForm.types';
 
@@ -13,6 +14,21 @@ interface ProductFormFieldsProps {
 }
 
 export const ProductFormFields = ({ index, form, onRemove }: ProductFormFieldsProps) => {
+  const handleAddTag = (event: React.KeyboardEvent<HTMLInputElement>, field: any) => {
+    if (event.key === 'Enter' || event.key === ',') {
+      event.preventDefault();
+      const value = event.currentTarget.value.trim();
+      if (value && !field.value.includes(value)) {
+        field.onChange([...field.value, value]);
+        event.currentTarget.value = '';
+      }
+    }
+  };
+
+  const handleRemoveTag = (tagToRemove: string, field: any) => {
+    field.onChange(field.value.filter((tag: string) => tag !== tagToRemove));
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
@@ -137,15 +153,33 @@ export const ProductFormFields = ({ index, form, onRemove }: ProductFormFieldsPr
         name={`products.${index}.coverage`}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Cobertura (separar por vírgula)</FormLabel>
-            <FormControl>
-              <Input 
-                value={field.value.join(',')}
-                onChange={e => field.onChange(
-                  e.target.value.split(',').map(item => item.trim()).filter(Boolean)
-                )}
-              />
-            </FormControl>
+            <FormLabel>Cobertura</FormLabel>
+            <div className="space-y-2">
+              <div className="flex flex-wrap gap-2">
+                {field.value.map((tag: string, tagIndex: number) => (
+                  <Badge 
+                    key={tagIndex} 
+                    variant="secondary"
+                    className="flex items-center gap-1"
+                  >
+                    {tag}
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveTag(tag, field)}
+                      className="hover:text-destructive"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </Badge>
+                ))}
+              </div>
+              <FormControl>
+                <Input
+                  placeholder="Digite e pressione Enter para adicionar"
+                  onKeyDown={(e) => handleAddTag(e, field)}
+                />
+              </FormControl>
+            </div>
             <FormMessage />
           </FormItem>
         )}
