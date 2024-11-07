@@ -47,7 +47,7 @@ const PlanForm = () => {
   const queryClient = useQueryClient();
   const isEditing = Boolean(id);
 
-  const { data: plan, isLoading: isLoadingPlan } = useQuery({
+  const { data: plan, isLoading: isLoadingPlan } = useQuery<Plan>({
     queryKey: ['plan', id],
     queryFn: () => apiService.plans.getPlan(id!),
     enabled: isEditing
