@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useForm } from 'react-hook-form';
+import { useForm, useFieldArray } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Loader2, ArrowLeft } from 'lucide-react';
+import { Loader2, ArrowLeft, Plus, Trash2 } from 'lucide-react';
 import { apiService } from '@/services/api';
 import { useToast } from '@/components/ui/use-toast';
 import type { Product } from '@/types/user';
@@ -61,6 +61,11 @@ const PlanForm = () => {
       description: '',
       products: [defaultProduct]
     }
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "products"
   });
 
   React.useEffect(() => {
@@ -175,6 +180,156 @@ const PlanForm = () => {
               </FormItem>
             )}
           />
+
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-semibold">Produtos</h2>
+              <Button
+                type="button"
+                onClick={() => append(defaultProduct)}
+                variant="outline"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Adicionar Produto
+              </Button>
+            </div>
+
+            {fields.map((field, index) => (
+              <div key={field.id} className="p-4 border rounded-lg space-y-4">
+                <div className="flex justify-between items-center">
+                  <h3 className="font-medium">Produto {index + 1}</h3>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => remove(index)}
+                    className="text-destructive"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+
+                <FormField
+                  control={form.control}
+                  name={`products.${index}.name`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Nome</FormLabel>
+                      <FormControl>
+                        <Input {...field} maxLength={100} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name={`products.${index}.description`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Descrição</FormLabel>
+                      <FormControl>
+                        <Textarea {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name={`products.${index}.sku`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>SKU</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name={`products.${index}.value`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Valor</FormLabel>
+                      <FormControl>
+                        <Input 
+                          type="number" 
+                          min="0" 
+                          step="0.01"
+                          onChange={e => field.onChange(parseFloat(e.target.value))}
+                          value={field.value}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name={`products.${index}.quantity`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Quantidade</FormLabel>
+                      <FormControl>
+                        <Input 
+                          type="number" 
+                          min="0" 
+                          step="1"
+                          onChange={e => field.onChange(parseInt(e.target.value))}
+                          value={field.value}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name={`products.${index}.thumbnail`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>URL da Imagem</FormLabel>
+                      <FormControl>
+                        <Input 
+                          type="url" 
+                          onChange={e => field.onChange(e.target.value || null)}
+                          value={field.value || ''}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name={`products.${index}.coverage`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Cobertura (separar por vírgula)</FormLabel>
+                      <FormControl>
+                        <Input 
+                          value={field.value.join(',')}
+                          onChange={e => field.onChange(
+                            e.target.value.split(',').map(item => item.trim()).filter(Boolean)
+                          )}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            ))}
+          </div>
 
           <Button
             type="submit"
