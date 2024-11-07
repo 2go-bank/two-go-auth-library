@@ -15,6 +15,19 @@ interface ProductFormFieldsProps {
 }
 
 export const ProductFormFields = ({ index, form, onRemove }: ProductFormFieldsProps) => {
+  const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>, field: any) => {
+    const value = e.target.value;
+    // If the input is empty, set it to 0
+    if (value === '') {
+      field.onChange(0);
+      return;
+    }
+    // Parse the input value as an integer
+    const parsedValue = parseInt(value, 10);
+    // If the parsed value is a valid number, use it; otherwise, use 0
+    field.onChange(isNaN(parsedValue) ? 0 : parsedValue);
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
@@ -88,7 +101,7 @@ export const ProductFormFields = ({ index, form, onRemove }: ProductFormFieldsPr
                   type="number" 
                   min="0" 
                   step="1"
-                  onChange={e => field.onChange(parseInt(e.target.value))}
+                  onChange={(e) => handleQuantityChange(e, field)}
                   value={field.value}
                 />
               </FormControl>
