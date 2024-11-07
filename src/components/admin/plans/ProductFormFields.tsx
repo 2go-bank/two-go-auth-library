@@ -2,9 +2,10 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/comp
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Trash2, X } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 import { UseFormReturn } from 'react-hook-form';
+import { CurrencyInput } from './CurrencyInput';
+import { CoverageTags } from './CoverageTags';
 import type { PlanFormValues } from './PlanForm.types';
 
 interface ProductFormFieldsProps {
@@ -14,46 +15,6 @@ interface ProductFormFieldsProps {
 }
 
 export const ProductFormFields = ({ index, form, onRemove }: ProductFormFieldsProps) => {
-  const handleAddTag = (event: React.KeyboardEvent<HTMLInputElement>, field: any) => {
-    if (event.key === 'Enter' || event.key === ',') {
-      event.preventDefault();
-      const value = event.currentTarget.value.trim();
-      if (value && !field.value.includes(value)) {
-        field.onChange([...field.value, value]);
-        event.currentTarget.value = '';
-      }
-    }
-  };
-
-  const handleRemoveTag = (tagToRemove: string, field: any) => {
-    field.onChange(field.value.filter((tag: string) => tag !== tagToRemove));
-  };
-
-  const formatCurrency = (value: number): string => {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-    }).format(value);
-  };
-
-  const parseCurrencyInput = (value: string): number => {
-    // Remove currency symbol, dots and convert comma to dot for parsing
-    const numericValue = value.replace(/[R$\s.]/g, '').replace(',', '.');
-    return parseFloat(numericValue) || 0;
-  };
-
-  const handleCurrencyInput = (e: React.ChangeEvent<HTMLInputElement>, field: any) => {
-    const inputValue = e.target.value.replace(/[^0-9,]/g, '');
-    
-    if (inputValue === '') {
-      field.onChange(0);
-      return;
-    }
-
-    const numericValue = parseCurrencyInput(inputValue);
-    field.onChange(numericValue);
-  };
-
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
@@ -114,23 +75,7 @@ export const ProductFormFields = ({ index, form, onRemove }: ProductFormFieldsPr
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <FormField
-          control={form.control}
-          name={`products.${index}.value`}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Valor</FormLabel>
-              <FormControl>
-                <Input 
-                  value={formatCurrency(field.value)}
-                  onChange={(e) => handleCurrencyInput(e, field)}
-                  placeholder="R$ 0,00"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <CurrencyInput index={index} form={form} />
 
         <FormField
           control={form.control}
@@ -171,42 +116,7 @@ export const ProductFormFields = ({ index, form, onRemove }: ProductFormFieldsPr
         )}
       />
 
-      <FormField
-        control={form.control}
-        name={`products.${index}.coverage`}
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Cobertura</FormLabel>
-            <div className="space-y-2">
-              <div className="flex flex-wrap gap-2">
-                {field.value.map((tag: string, tagIndex: number) => (
-                  <Badge 
-                    key={tagIndex} 
-                    variant="secondary"
-                    className="flex items-center gap-1"
-                  >
-                    {tag}
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveTag(tag, field)}
-                      className="hover:text-destructive"
-                    >
-                      <X className="h-3 w-3" />
-                    </button>
-                  </Badge>
-                ))}
-              </div>
-              <FormControl>
-                <Input
-                  placeholder="Digite e pressione Enter para adicionar"
-                  onKeyDown={(e) => handleAddTag(e, field)}
-                />
-              </FormControl>
-            </div>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+      <CoverageTags index={index} form={form} />
     </div>
   );
 };
