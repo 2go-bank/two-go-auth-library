@@ -1,8 +1,8 @@
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
 import { UseFormReturn } from 'react-hook-form';
-import { formatCurrency } from '@/utils/currencyUtils';
+import { NumericFormat } from 'react-number-format';
 import type { PlanFormValues } from './PlanForm.types';
+import { cn } from '@/lib/utils';
 
 interface CurrencyInputProps {
   index: number;
@@ -10,22 +10,6 @@ interface CurrencyInputProps {
 }
 
 export const CurrencyInput = ({ index, form }: CurrencyInputProps) => {
-  const handleCurrencyInput = (e: React.ChangeEvent<HTMLInputElement>, field: any) => {
-    let inputValue = e.target.value;
-    
-    // Remove any non-numeric characters except comma
-    inputValue = inputValue.replace(/[^\d,]/g, '');
-    
-    if (inputValue === '') {
-      field.onChange(0);
-      return;
-    }
-
-    // Convert to number format (using comma as decimal separator)
-    const numericValue = parseFloat(inputValue.replace(',', '.')) || 0;
-    field.onChange(numericValue);
-  };
-
   return (
     <FormField
       control={form.control}
@@ -34,11 +18,19 @@ export const CurrencyInput = ({ index, form }: CurrencyInputProps) => {
         <FormItem>
           <FormLabel>Valor</FormLabel>
           <FormControl>
-            <Input 
-              value={field.value === 0 ? '' : formatCurrency(field.value)}
-              onChange={(e) => handleCurrencyInput(e, field)}
-              placeholder="R$ 0,00"
-              inputMode="decimal"
+            <NumericFormat
+              value={field.value}
+              onValueChange={(values) => {
+                field.onChange(values.floatValue || 0);
+              }}
+              decimalSeparator=","
+              thousandSeparator="."
+              decimalScale={2}
+              fixedDecimalScale
+              className={cn(
+                "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              )}
+              placeholder="0,00"
             />
           </FormControl>
           <FormMessage />
