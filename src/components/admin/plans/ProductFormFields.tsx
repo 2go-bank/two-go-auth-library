@@ -13,7 +13,7 @@ interface ProductFormFieldsProps {
   index: number;
   form: UseFormReturn<PlanFormValues>;
   onRemove: () => void;
-  onModified: (isModified: boolean) => void;
+  onModified: () => void;
 }
 
 export const ProductFormFields = ({ index, form, onRemove, onModified }: ProductFormFieldsProps) => {
@@ -25,7 +25,7 @@ export const ProductFormFields = ({ index, form, onRemove, onModified }: Product
 
   // Update parent when any field changes
   useEffect(() => {
-    onModified(true);
+    onModified();
   }, [product, onModified]);
 
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>, field: any) => {

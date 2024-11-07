@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import { ProductFormFields } from './ProductFormFields';
 import { UseFormReturn } from 'react-hook-form';
@@ -12,6 +12,18 @@ interface ProductAccordionItemProps {
 
 export const ProductAccordionItem = ({ index, form, onRemove }: ProductAccordionItemProps) => {
   const [isModified, setIsModified] = useState(false);
+  const [initialValues, setInitialValues] = useState(form.watch(`products.${index}`));
+
+  useEffect(() => {
+    // Armazena os valores iniciais quando o componente é montado
+    setInitialValues(form.watch(`products.${index}`));
+  }, []);
+
+  const handleModified = () => {
+    const currentValues = form.watch(`products.${index}`);
+    const hasChanged = JSON.stringify(currentValues) !== JSON.stringify(initialValues);
+    setIsModified(hasChanged);
+  };
 
   return (
     <AccordionItem 
@@ -26,7 +38,7 @@ export const ProductAccordionItem = ({ index, form, onRemove }: ProductAccordion
           index={index}
           form={form}
           onRemove={onRemove}
-          onModified={setIsModified}
+          onModified={handleModified}
         />
       </AccordionContent>
     </AccordionItem>
