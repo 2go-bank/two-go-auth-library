@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import { ProductFormFields } from './ProductFormFields';
-import { UseFormReturn } from 'react-hook-form';
+import { UseFormReturn, useWatch } from 'react-hook-form';
 import type { PlanFormValues } from './PlanForm.types';
+import { formatCurrency } from '@/utils/formatters';
 
 interface ProductAccordionItemProps {
   index: number;
@@ -31,13 +32,31 @@ export const ProductAccordionItem = ({ index, form, onRemove }: ProductAccordion
     }
   };
 
+  const product = useWatch({
+    control: form.control,
+    name: `products.${index}`
+  });
+
+  const productInfo = product ? (
+    <div className="flex items-center gap-4">
+      <span className="text-sm text-muted-foreground">
+        {product.quantity}x {formatCurrency(product.value)}
+      </span>
+      <span className="font-medium">
+        {product.name || `Produto ${index + 1}`}
+      </span>
+    </div>
+  ) : (
+    `Produto ${index + 1}`
+  );
+
   return (
     <AccordionItem 
       value={`item-${index}`} 
       className={`border rounded-lg ${isModified ? 'bg-yellow-50' : 'bg-white'}`}
     >
       <AccordionTrigger className="px-4" onClick={handleAccordionTrigger}>
-        {form.watch(`products.${index}.name`) || `Produto ${index + 1}`}
+        {productInfo}
       </AccordionTrigger>
       <AccordionContent className="px-4">
         <ProductFormFields
