@@ -1,50 +1,46 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
-import dts from 'vite-plugin-dts'
+
+// Carrega todas as variáveis de ambiente do arquivo .env
+const envVars = {
+    VITE_AUTH_API_URL: process.env.VITE_AUTH_API_URL || 'https://api.2gopag.com/access/auth',
+    VITE_API_BASE_URL: process.env.VITE_API_BASE_URL || 'https://api.2gopag.com',
+    VITE_ENVIRONMENT: process.env.VITE_ENVIRONMENT || 'production',
+    VITE_LOGO_URL: process.env.VITE_LOGO_URL || 'https://2gobank.com.br/wp-content/uploads/2023/05/logo-2go-bank.png'
+}
 
 export default defineConfig({
-    plugins: [
-        react(),
-        dts({
-            insertTypesEntry: true,
-        }),
-    ],
+    plugins: [react()],
     build: {
-        lib: {
-            entry: resolve(__dirname, 'src/index.ts'),
-            name: '2goBaseAuth',
-            formats: ['es', 'umd'],
-            fileName: (format) => `2go-base-auth.${format}.js`
-        },
+        outDir: 'dist',
         rollupOptions: {
-            external: ['react', 'react-dom', 'firebase/app', 'firebase/messaging', 'react-google-recaptcha'],
             input: {
                 main: resolve(__dirname, 'index.html'),
             },
+            external: ['react', 'react-dom'],
             output: {
                 globals: {
-                    react: 'React',
-                    'react-dom': 'ReactDOM',
-                    'firebase/app': 'firebase',
-                    'firebase/messaging': 'firebaseMessaging',
-                    'react-google-recaptcha': 'ReCAPTCHA'
-                }
+                    'react': 'React',
+                    'react-dom': 'ReactDOM'
+                },
+                format: 'umd',
+                name: '2go-base-auth'
             }
         },
-        sourcemap: true,
-        emptyOutDir: true,
+        copyPublicDir: true,
     },
     resolve: {
         alias: {
             '@': resolve(__dirname, 'src')
         }
     },
-    optimizeDeps: {
-        include: ['firebase/app', 'firebase/messaging', 'react-google-recaptcha']
-    },
-    server: {
-        port: 5173,
-        host: true
+    define: {
+        'process.env': envVars,
+        'process': {
+            env: envVars
+        },
+        'global.process.env': envVars,
+        'window.process.env': envVars
     }
 })
