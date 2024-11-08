@@ -10,10 +10,10 @@ import {
 } from "@/components/ui/sheet";
 
 const getEnvVar = (key: string) => {
-  if (process.env.NODE_ENV === 'test') {
-    return process.env[key];
+  if (typeof window !== 'undefined') {
+    return window.env?.[key] || import.meta.env[key];
   }
-  return (window as any).env?.[key] || import.meta.env[key];
+  return process.env[key];
 };
 
 const Header = () => {
