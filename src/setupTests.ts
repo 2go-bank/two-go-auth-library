@@ -1,8 +1,21 @@
 import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 
+declare global {
+  var vi: typeof vi;
+  interface Window {
+    env?: {
+      VITE_RECAPTCHA_SITE_KEY?: string;
+      VITE_LOGO_URL?: string;
+      VITE_AUTH_API_URL?: string;
+      VITE_API_BASE_URL?: string;
+      VITE_ENVIRONMENT?: string;
+    }
+  }
+}
+
 // Mock Vite's import.meta.env
-global.import = {
+(global as any).import = {
   meta: {
     env: {
       VITE_RECAPTCHA_SITE_KEY: 'test-key',
@@ -10,10 +23,11 @@ global.import = {
       VITE_AUTH_API_URL: 'test-api-url',
       VITE_API_BASE_URL: 'test-base-url',
       VITE_ENVIRONMENT: 'test',
-      // Add any other environment variables used in your components
     }
   }
 };
 
 // Make vi available globally for all tests
-global.vi = vi;
+(global as any).vi = vi;
+
+export {};
