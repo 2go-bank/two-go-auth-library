@@ -9,8 +9,6 @@ const filesToCopy = [
     'components.json',
     'eslint.config.js',
     'index.html',
-    'package.json',
-    'package-lock.json',
     'postcss.config.js',
     'README.md',
     'tailwind.config.ts',
