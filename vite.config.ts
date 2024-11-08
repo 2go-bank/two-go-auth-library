@@ -1,8 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { VitePWA } from 'vite-plugin-pwa';
 import dts from 'vite-plugin-dts';
-import path from 'path';
+import { resolve } from 'path';
 
 export default defineConfig({
     plugins: [
@@ -10,40 +9,27 @@ export default defineConfig({
         dts({
             insertTypesEntry: true,
         }),
-        VitePWA({
-            registerType: 'autoUpdate',
-            includeAssets: ['favicon.png', 'apple-touch-icon.png', 'masked-icon.svg'],
-            manifest: {
-                name: '2GO Base Auth',
-                short_name: '2GO Auth',
-                description: 'Sistema de autenticação do 2GO Bank',
-                theme_color: '#000000',
-                background_color: '#ffffff',
-                display: 'standalone',
-                icons: [
-                    {
-                        src: 'pwa-192x192.png',
-                        sizes: '192x192',
-                        type: 'image/png'
-                    },
-                    {
-                        src: 'pwa-512x512.png',
-                        sizes: '512x512',
-                        type: 'image/png'
-                    },
-                    {
-                        src: 'pwa-512x512.png',
-                        sizes: '512x512',
-                        type: 'image/png',
-                        purpose: 'any maskable'
-                    }
-                ]
-            }
-        })
     ],
+    build: {
+        lib: {
+            entry: resolve(__dirname, 'src/index.ts'),
+            name: 'TGAuthSkeleton',
+            formats: ['es'],
+            fileName: 'index',
+        },
+        rollupOptions: {
+            external: ['react', 'react-dom', 'react/jsx-runtime'],
+            output: {
+                globals: {
+                    react: 'React',
+                    'react-dom': 'ReactDOM',
+                },
+            },
+        },
+    },
     resolve: {
         alias: {
-            '@': path.resolve(__dirname, './src'),
+            '@': resolve(__dirname, './src'),
         },
     },
 });

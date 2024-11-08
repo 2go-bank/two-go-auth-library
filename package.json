@@ -1,16 +1,25 @@
 {
   "name": "@tg-devs/auth-skeleton",
-  "version": "1.1.12",
+  "private": true,
+  "version": "1.0.0",
   "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "build:dev": "tsc && vite build",
-    "build:preview": "tsc && vite build",
-    "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "test": "jest",
-    "test:coverage": "jest --coverage"
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test && npm run lint",
+    "preversion": "npm run lint",
+    "version": "git add -A src",
+    "postversion": "git push && git push --tags"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
