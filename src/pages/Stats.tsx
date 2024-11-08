@@ -11,15 +11,15 @@ const Stats = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-gray-900">Cobertura de Testes</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="space-y-6 px-4 sm:px-6">
+      <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center sm:text-left">Cobertura de Testes</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Declarações</CardTitle>
+            <CardTitle className="text-lg text-center sm:text-left">Declarações</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-[#EFB207]">
+            <p className="text-2xl font-bold text-[#EFB207] text-center sm:text-left">
               {formatPercentage(coverageData.statements)}
             </p>
           </CardContent>
@@ -27,10 +27,10 @@ const Stats = () => {
         
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Branches</CardTitle>
+            <CardTitle className="text-lg text-center sm:text-left">Branches</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-[#EFB207]">
+            <p className="text-2xl font-bold text-[#EFB207] text-center sm:text-left">
               {formatPercentage(coverageData.branches)}
             </p>
           </CardContent>
@@ -38,10 +38,10 @@ const Stats = () => {
         
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Funções</CardTitle>
+            <CardTitle className="text-lg text-center sm:text-left">Funções</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-[#EFB207]">
+            <p className="text-2xl font-bold text-[#EFB207] text-center sm:text-left">
               {formatPercentage(coverageData.functions)}
             </p>
           </CardContent>
@@ -49,10 +49,10 @@ const Stats = () => {
         
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Linhas</CardTitle>
+            <CardTitle className="text-lg text-center sm:text-left">Linhas</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-[#EFB207]">
+            <p className="text-2xl font-bold text-[#EFB207] text-center sm:text-left">
               {formatPercentage(coverageData.lines)}
             </p>
           </CardContent>

@@ -25,17 +25,17 @@ const CheckoutSummary = ({ plan, onBillingCycleChange }: CheckoutSummaryProps) =
 
   return (
     <>
-      <CardHeader>
-        <h2 className="text-xl font-semibold">Resumo do Pedido</h2>
+      <CardHeader className="space-y-2">
+        <h2 className="text-xl font-semibold text-center sm:text-left">Resumo do Pedido</h2>
       </CardHeader>
       <CardContent className="space-y-6">
         <div>
-          <h3 className="font-medium mb-2">{plan.name}</h3>
-          <p className="text-sm text-muted-foreground">{plan.description}</p>
+          <h3 className="font-medium mb-2 text-center sm:text-left">{plan.name}</h3>
+          <p className="text-sm text-muted-foreground text-center sm:text-left">{plan.description}</p>
         </div>
 
         <div className="space-y-3">
-          <p className="font-medium">Ciclo de Cobrança</p>
+          <p className="font-medium text-center sm:text-left">Ciclo de Cobrança</p>
           <RadioGroup
             defaultValue="yearly"
             value={billingCycle}
@@ -64,11 +64,11 @@ const CheckoutSummary = ({ plan, onBillingCycleChange }: CheckoutSummaryProps) =
         </div>
 
         <div className="border-t pt-4">
-          <div className="flex justify-between mb-2">
+          <div className="flex flex-col sm:flex-row justify-between gap-2 mb-2">
             <span>Valor {billingCycle === 'yearly' ? 'anual' : 'mensal'}</span>
             <span>{formatCurrency(total)}</span>
           </div>
-          <div className="flex justify-between font-semibold text-lg">
+          <div className="flex flex-col sm:flex-row justify-between gap-2 font-semibold text-lg">
             <span>Total</span>
             <span>{formatCurrency(total)}</span>
           </div>

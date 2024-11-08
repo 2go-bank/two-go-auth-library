@@ -29,7 +29,7 @@ const queryClient = new QueryClient();
 
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center w-full h-screen">
-    <div className="text-center">
+    <div className="flex flex-col items-center">
       <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#EFB207]"></div>
       <p className="mt-4 text-[#EFB207]">Carregando...</p>
     </div>
@@ -38,7 +38,7 @@ const LoadingSpinner = () => (
 
 const AuthLayout = () => (
   <div className="min-h-screen flex flex-col bg-white">
-    <main className="flex-grow container mx-auto px-4 py-8">
+    <main className="flex-grow container mx-auto px-4 sm:px-6 py-8">
       <Suspense fallback={<LoadingSpinner />}>
         <Routes>
           <Route index element={<Login />} />
@@ -57,7 +57,7 @@ const AuthLayout = () => (
 const MainLayout = () => (
   <div className="min-h-screen flex flex-col bg-white">
     <Header />
-    <main className="flex-grow container mx-auto px-4 py-8">
+    <main className="flex-grow container mx-auto px-4 sm:px-6 py-8">
       <Suspense fallback={<LoadingSpinner />}>
         <Routes>
           <Route index element={<ProtectedRoute><Home /></ProtectedRoute>} />

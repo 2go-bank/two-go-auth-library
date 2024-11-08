@@ -42,7 +42,7 @@ const BuyerForm = () => {
   return (
     <Card>
       <CardHeader>
-        <h2 className="text-xl font-semibold">Dados do Comprador</h2>
+        <h2 className="text-xl font-semibold text-center sm:text-left">Dados do Comprador</h2>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -53,7 +53,7 @@ const BuyerForm = () => {
               value={formData.name}
               onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
               placeholder="Digite seu nome completo" 
-              className="placeholder:text-[#CCCCCC]"
+              className="w-full placeholder:text-[#CCCCCC]"
             />
           </div>
           <div className="space-y-2">
@@ -63,7 +63,7 @@ const BuyerForm = () => {
               value={formData.cpf}
               onChange={handleCPFChange}
               placeholder="000.000.000-00" 
-              className={`placeholder:text-[#CCCCCC] ${errors.cpf ? 'border-red-500' : ''}`}
+              className={`w-full placeholder:text-[#CCCCCC] ${errors.cpf ? 'border-red-500' : ''}`}
             />
             {errors.cpf && <p className="text-sm text-red-500">{errors.cpf}</p>}
           </div>
@@ -75,7 +75,7 @@ const BuyerForm = () => {
               value={formData.email}
               onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
               placeholder="Digite seu e-mail" 
-              className="placeholder:text-[#CCCCCC]"
+              className="w-full placeholder:text-[#CCCCCC]"
             />
           </div>
           <div className="space-y-2">
@@ -85,7 +85,7 @@ const BuyerForm = () => {
               value={formData.phone}
               onChange={handlePhoneChange}
               placeholder="(00) 00000-0000" 
-              className={`placeholder:text-[#CCCCCC] ${errors.phone ? 'border-red-500' : ''}`}
+              className={`w-full placeholder:text-[#CCCCCC] ${errors.phone ? 'border-red-500' : ''}`}
             />
             {errors.phone && <p className="text-sm text-red-500">{errors.phone}</p>}
           </div>
