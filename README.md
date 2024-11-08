@@ -63,6 +63,26 @@ VITE_LOGO_URL=https://2gobank.com.br/wp-content/uploads/2023/05/logo-2go-bank.pn
 npm install @reduxjs/toolkit react-redux react-router-dom @tanstack/react-query crypto-js tailwindcss
 ```
 
+## Compartilhando o Projeto
+
+Para compartilhar este projeto com outro usuário do GPT Engineer:
+
+1. Exporte o código-fonte:
+   - Comprima a pasta do projeto em um arquivo ZIP.
+
+2. Compartilhe o arquivo ZIP:
+   - Use um serviço de compartilhamento de arquivos (ex: Google Drive, Dropbox).
+
+3. Compartilhe as informações do ambiente:
+   - Envie o arquivo `.env` separadamente por um canal seguro.
+   - Crie e compartilhe um arquivo `.env.example` com a estrutura, mas sem valores reais.
+
+4. Instruções para o receptor:
+   - Descompacte o arquivo ZIP em uma pasta local.
+   - Copie o arquivo `.env` para a raiz do projeto.
+   - Execute `npm install` ou `yarn` para instalar as dependências.
+   - Siga as instruções de configuração acima.
+
 ## Licença
 
 Este projeto é privado e proprietário do 2GO Bank.
