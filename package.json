@@ -1,7 +1,7 @@
 {
   "name": "@tg-devs/auth-skeleton",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.12",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",
