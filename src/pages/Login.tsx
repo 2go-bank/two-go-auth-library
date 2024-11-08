@@ -6,7 +6,7 @@ import CryptoJS from 'crypto-js';
 import { requestNotificationPermission } from '@/config/firebase';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { LogIn } from 'lucide-react';
+import MicrosoftLogo from '@/components/icons/MicrosoftLogo';
 
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -146,11 +146,11 @@ const Login = () => {
 
         <Button 
           variant="outline" 
-          className="w-full flex items-center justify-center gap-2 text-[#EFB207] border-[#EFB207] hover:bg-[#EFB207] hover:text-black"
+          className="w-full h-12 flex items-center justify-center gap-3 text-white bg-[#2F2F2F] hover:bg-[#404040] border-none transition-colors"
           onClick={handleMicrosoftLogin}
         >
-          <LogIn className="h-5 w-5" />
-          Entrar com sua conta Microsoft
+          <MicrosoftLogo />
+          <span>Entrar com Microsoft</span>
         </Button>
       </div>
     </div>
