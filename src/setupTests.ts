@@ -2,8 +2,8 @@ import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 
 declare global {
-  // Declare vi globally using its inferred type
-  var vi: typeof vi;
+  // eslint-disable-next-line no-var
+  var vi: any;
   interface Window {
     env?: {
       VITE_RECAPTCHA_SITE_KEY?: string;
