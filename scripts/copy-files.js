@@ -27,35 +27,45 @@ const filesToCopy = [
 ];
 
 async function copyFileOrDirectory(source, destination) {
-    if (fs.existsSync(source)) {
-        if (fs.lstatSync(source).isDirectory()) {
-            if (!fs.existsSync(destination)) {
-                fs.mkdirSync(destination, { recursive: true });
-            }
+    try {
+        if (fs.existsSync(source)) {
+            if (fs.lstatSync(source).isDirectory()) {
+                if (!fs.existsSync(destination)) {
+                    fs.mkdirSync(destination, { recursive: true });
+                }
 
-            const files = fs.readdirSync(source);
-            for (const file of files) {
-                const sourcePath = path.join(source, file);
-                const destPath = path.join(destination, file);
-                await copyFileOrDirectory(sourcePath, destPath);
+                const files = fs.readdirSync(source);
+                for (const file of files) {
+                    const sourcePath = path.join(source, file);
+                    const destPath = path.join(destination, file);
+                    await copyFileOrDirectory(sourcePath, destPath);
+                }
+            } else {
+                fs.copyFileSync(source, destination);
             }
-        } else {
-            fs.copyFileSync(source, destination);
         }
+    } catch (error) {
+        console.error(`Error copying ${source} to ${destination}:`, error);
+        throw error;
     }
 }
 
 async function main() {
     try {
+        // Get the project root directory
         const projectRoot = process.env.INIT_CWD || process.cwd();
-
+        
         if (!projectRoot) {
             console.error('Could not determine project root directory');
             process.exit(1);
         }
 
-        const __dirname = path.dirname(__filename);
-        const packageRoot = path.resolve(__dirname, '..');
+        // Get the package root directory (where this script is located)
+        const scriptDir = __dirname;
+        const packageRoot = path.resolve(scriptDir, '..');
+
+        console.log('Project root:', projectRoot);
+        console.log('Package root:', packageRoot);
 
         for (const file of filesToCopy) {
             const source = path.join(packageRoot, file);
