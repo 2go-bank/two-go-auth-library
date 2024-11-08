@@ -1,5 +1,4 @@
-/** @type {import('jest').Config} */
-const config = {
+export default {
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
   moduleNameMapper: {
@@ -20,6 +19,7 @@ const config = {
   ],
   coverageDirectory: 'coverage',
   coverageReporters: ['lcov', 'text-summary'],
+  testEnvironmentOptions: {
+    customExportConditions: ['node', 'node-addons'],
+  }
 };
-
-export default config;
