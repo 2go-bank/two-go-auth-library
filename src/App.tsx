@@ -23,6 +23,7 @@ const Plans = React.lazy(() => import('./pages/Plans'));
 const Checkout = React.lazy(() => import('./pages/Checkout'));
 const AdminPlansList = React.lazy(() => import('./pages/admin/PlansList'));
 const AdminPlanForm = React.lazy(() => import('./pages/admin/PlanForm'));
+const AuthCallback = React.lazy(() => import('./pages/AuthCallback'));
 
 const queryClient = new QueryClient();
 
@@ -42,7 +43,7 @@ const AuthLayout = () => (
         <Routes>
           <Route index element={<Login />} />
           <Route path="login" element={<Login />} />
-          <Route path="auth/:code" element={<Login />} />
+          <Route path="auth/:code" element={<AuthCallback />} />
           <Route path="register" element={<Register />} />
           <Route path="forgot-password" element={<ForgotPassword />} />
           <Route path="validate-otp" element={<ValidateOTP />} />
