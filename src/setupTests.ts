@@ -1,8 +1,7 @@
 import '@testing-library/jest-dom';
 
+// Extend the NodeJS global type to include Jest
 declare global {
-  // eslint-disable-next-line no-var
-  var jest: typeof jest;
   interface Window {
     env?: {
       VITE_RECAPTCHA_SITE_KEY?: string;
