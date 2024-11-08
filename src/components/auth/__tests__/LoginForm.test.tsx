@@ -30,7 +30,32 @@ describe('LoginForm', () => {
 
   test('disables submit button when loading', () => {
     render(<LoginForm onSubmit={mockOnSubmit} isLoading={true} />);
-    const submitButton = screen.getByRole('button', { name: /entrar/i });
+    const submitButton = screen.getByRole('button', { name: /entrando\.\.\.|entrar/i });
     expect(submitButton).toBeDisabled();
+  });
+
+  test('toggles password visibility', () => {
+    const passwordInput = screen.getByLabelText(/senha/i);
+    const toggleButton = screen.getByRole('button', { name: '' });
+
+    expect(passwordInput).toHaveAttribute('type', 'password');
+    
+    fireEvent.click(toggleButton);
+    expect(passwordInput).toHaveAttribute('type', 'text');
+    
+    fireEvent.click(toggleButton);
+    expect(passwordInput).toHaveAttribute('type', 'password');
+  });
+
+  test('requires username and password fields', () => {
+    const submitButton = screen.getByRole('button', { name: /entrar/i });
+    const usernameInput = screen.getByLabelText(/usuário/i);
+    const passwordInput = screen.getByLabelText(/senha/i);
+
+    expect(usernameInput).toBeRequired();
+    expect(passwordInput).toBeRequired();
+
+    fireEvent.click(submitButton);
+    expect(mockOnSubmit).not.toHaveBeenCalled();
   });
 });
