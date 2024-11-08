@@ -1,7 +1,13 @@
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { Menu, X } from 'lucide-react';
 import UserProfileWidget from './UserProfileWidget';
 import { isAuthenticated } from '@/utils/auth';
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 const Header = () => {
   const isUserAuthenticated = isAuthenticated();
@@ -9,6 +15,7 @@ const Header = () => {
   const headerTextColor = import.meta.env.VITE_HEADER_TEXT_COLOR || '#EFB207';
   const headerLinkColor = import.meta.env.VITE_HEADER_LINK_COLOR || '#EFB207';
   const [logoUrl, setLogoUrl] = useState((window as any).env?.VITE_LOGO_URL || import.meta.env.VITE_LOGO_URL);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     const handleEnvUpdate = () => {
@@ -18,6 +25,56 @@ const Header = () => {
     window.addEventListener('env-updated', handleEnvUpdate);
     return () => window.removeEventListener('env-updated', handleEnvUpdate);
   }, []);
+
+  const NavigationLinks = () => (
+    <ul className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-6" style={{ color: headerTextColor }}>
+      {isUserAuthenticated ? (
+        <>
+          <li>
+            <Link 
+              to="/app" 
+              style={{ color: headerLinkColor }}
+              className="hover:opacity-80 transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              Home
+            </Link>
+          </li>
+          <li>
+            <Link 
+              to="/app/stats" 
+              style={{ color: headerLinkColor }}
+              className="hover:opacity-80 transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              Stats
+            </Link>
+          </li>
+          <li>
+            <Link 
+              to="/app/plans" 
+              style={{ color: headerLinkColor }}
+              className="hover:opacity-80 transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              Planos
+            </Link>
+          </li>
+        </>
+      ) : (
+        <li>
+          <Link 
+            to="/login" 
+            style={{ color: headerLinkColor }}
+            className="hover:opacity-80 transition-colors"
+            onClick={() => setIsOpen(false)}
+          >
+            Login
+          </Link>
+        </li>
+      )}
+    </ul>
+  );
 
   return (
     <header 
@@ -29,55 +86,30 @@ const Header = () => {
           <img 
             src={logoUrl}
             alt="2GO Bank Logo" 
-            className="h-6" // Alterado para altura máxima de 24 pixels
+            className="h-6"
           />
         </Link>
         <div className="flex items-center space-x-6">
           <nav className="hidden md:block">
-            <ul className="flex space-x-6" style={{ color: headerTextColor }}>
-              {isUserAuthenticated ? (
-                <>
-                  <li>
-                    <Link 
-                      to="/app" 
-                      style={{ color: headerLinkColor }}
-                      className="hover:opacity-80 transition-colors"
-                    >
-                      Home
-                    </Link>
-                  </li>
-                  <li>
-                    <Link 
-                      to="/app/stats" 
-                      style={{ color: headerLinkColor }}
-                      className="hover:opacity-80 transition-colors"
-                    >
-                      Stats
-                    </Link>
-                  </li>
-                  <li>
-                    <Link 
-                      to="/app/plans" 
-                      style={{ color: headerLinkColor }}
-                      className="hover:opacity-80 transition-colors"
-                    >
-                      Planos
-                    </Link>
-                  </li>
-                </>
-              ) : (
-                <li>
-                  <Link 
-                    to="/login" 
-                    style={{ color: headerLinkColor }}
-                    className="hover:opacity-80 transition-colors"
-                  >
-                    Login
-                  </Link>
-                </li>
-              )}
-            </ul>
+            <NavigationLinks />
           </nav>
+          
+          {/* Mobile Menu */}
+          <Sheet open={isOpen} onOpenChange={setIsOpen}>
+            <SheetTrigger className="md:hidden" aria-label="Menu">
+              {isOpen ? (
+                <X className="h-6 w-6" style={{ color: headerLinkColor }} />
+              ) : (
+                <Menu className="h-6 w-6" style={{ color: headerLinkColor }} />
+              )}
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[80vw] pt-12" style={{ backgroundColor: headerBgColor }}>
+              <nav className="flex flex-col space-y-4">
+                <NavigationLinks />
+              </nav>
+            </SheetContent>
+          </Sheet>
+
           {isUserAuthenticated && <UserProfileWidget />}
         </div>
       </div>
