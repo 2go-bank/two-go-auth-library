@@ -75,26 +75,23 @@ const MainLayout = () => (
   </div>
 );
 
-const Router = ({ children }: { children: React.ReactNode }) => {
-  const isPreview = window.location.hostname.includes('preview--');
-  return isPreview ? <HashRouter>{children}</HashRouter> : <BrowserRouter>{children}</BrowserRouter>;
-};
-
 const App = () => {
   useEffect(() => {
     initializeConfigs();
   }, []);
 
+  const RouterComponent = window.location.hostname.includes('preview--') ? HashRouter : BrowserRouter;
+
   return (
     <QueryClientProvider client={queryClient}>
       <Provider store={store}>
-        <Router>
+        <RouterComponent>
           <Routes>
             <Route path="/*" element={<AuthLayout />} />
             <Route path="/app/*" element={<MainLayout />} />
           </Routes>
           <Toaster />
-        </Router>
+        </RouterComponent>
       </Provider>
     </QueryClientProvider>
   );
