@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { glob } from 'glob';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -18,7 +19,7 @@ const filesToCopy = [
     '.env'
 ];
 
-function copyFileOrDirectory(source, destination) {
+async function copyFileOrDirectory(source, destination) {
     if (fs.existsSync(source)) {
         if (fs.lstatSync(source).isDirectory()) {
             if (!fs.existsSync(destination)) {
@@ -26,11 +27,11 @@ function copyFileOrDirectory(source, destination) {
             }
 
             const files = fs.readdirSync(source);
-            files.forEach(file => {
+            for (const file of files) {
                 const sourcePath = path.join(source, file);
                 const destPath = path.join(destination, file);
-                copyFileOrDirectory(sourcePath, destPath);
-            });
+                await copyFileOrDirectory(sourcePath, destPath);
+            }
         } else {
             fs.copyFileSync(source, destination);
         }
@@ -49,13 +50,13 @@ try {
     const __dirname = path.dirname(__filename);
     const packageRoot = path.resolve(__dirname, '..');
 
-    filesToCopy.forEach(file => {
+    for (const file of filesToCopy) {
         const source = path.join(packageRoot, file);
         const destination = path.join(projectRoot, file);
 
-        copyFileOrDirectory(source, destination);
+        await copyFileOrDirectory(source, destination);
         console.log(`Copied ${file} to project root`);
-    });
+    }
 
     console.log('All files copied successfully!');
 } catch (error) {
