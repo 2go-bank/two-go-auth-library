@@ -1,5 +1,6 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 const filesToCopy = [
     'public',
@@ -46,6 +47,8 @@ try {
     }
 
     // Get the path to this package's files
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
     const packageRoot = path.resolve(__dirname, '..');
 
     // Copy each file/directory
