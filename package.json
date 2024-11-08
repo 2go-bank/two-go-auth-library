@@ -10,8 +10,7 @@
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "test": "jest",
-    "test:coverage": "jest --coverage",
-    "install": "node ./node_modules/@tg-devs/auth-skeleton/scripts/copy-files.js"
+    "test:coverage": "jest --coverage"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
