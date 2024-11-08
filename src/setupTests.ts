@@ -10,16 +10,32 @@ declare global {
       VITE_ENVIRONMENT?: string;
     }
   }
+  var import: {
+    meta: {
+      env: {
+        VITE_LOGO_URL: string;
+        VITE_AUTH_API_URL: string;
+        VITE_API_BASE_URL: string;
+        VITE_ENVIRONMENT: string;
+        VITE_HEADER_BG_COLOR: string;
+        VITE_HEADER_TEXT_COLOR: string;
+        VITE_HEADER_LINK_COLOR: string;
+      }
+    }
+  }
 }
 
 // Mock Vite's import.meta.env
-(global as any).import = {
+global.import = {
   meta: {
     env: {
       VITE_LOGO_URL: 'test-logo-url',
       VITE_AUTH_API_URL: 'test-api-url',
       VITE_API_BASE_URL: 'test-base-url',
       VITE_ENVIRONMENT: 'test',
+      VITE_HEADER_BG_COLOR: '#000000',
+      VITE_HEADER_TEXT_COLOR: '#EFB207',
+      VITE_HEADER_LINK_COLOR: '#EFB207'
     }
   }
 };

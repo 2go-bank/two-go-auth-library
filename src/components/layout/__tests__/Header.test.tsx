@@ -10,9 +10,22 @@ beforeAll(() => {
   };
 });
 
-jest.mock('@/utils/auth', () => ({
+// Mock import.meta.env
+vi.mock('@/utils/auth', () => ({
   isAuthenticated: jest.fn()
 }));
+
+const mockEnv = {
+  VITE_HEADER_BG_COLOR: '#000000',
+  VITE_HEADER_TEXT_COLOR: '#EFB207',
+  VITE_HEADER_LINK_COLOR: '#EFB207',
+  VITE_LOGO_URL: 'test-logo-url'
+};
+
+// Mock import.meta.env before tests
+beforeAll(() => {
+  vi.stubGlobal('import', { meta: { env: mockEnv } });
+});
 
 describe('Header', () => {
   beforeEach(() => {
