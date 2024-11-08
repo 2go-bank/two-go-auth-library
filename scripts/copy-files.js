@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-import { glob } from 'glob';
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+const fs = require('fs');
+const path = require('path');
+const { fileURLToPath } = require('url');
+const { glob } = require('glob');
 
 const filesToCopy = [
     'public',
@@ -38,28 +38,34 @@ async function copyFileOrDirectory(source, destination) {
     }
 }
 
-try {
-    const projectRoot = process.env.INIT_CWD || process.cwd();
+async function main() {
+    try {
+        const projectRoot = process.env.INIT_CWD || process.cwd();
 
-    if (!projectRoot) {
-        console.error('Could not determine project root directory');
+        if (!projectRoot) {
+            console.error('Could not determine project root directory');
+            process.exit(1);
+        }
+
+        const __dirname = path.dirname(__filename);
+        const packageRoot = path.resolve(__dirname, '..');
+
+        for (const file of filesToCopy) {
+            const source = path.join(packageRoot, file);
+            const destination = path.join(projectRoot, file);
+
+            await copyFileOrDirectory(source, destination);
+            console.log(`Copied ${file} to project root`);
+        }
+
+        console.log('All files copied successfully!');
+    } catch (error) {
+        console.error('Error copying files:', error);
         process.exit(1);
     }
-
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = path.dirname(__filename);
-    const packageRoot = path.resolve(__dirname, '..');
-
-    for (const file of filesToCopy) {
-        const source = path.join(packageRoot, file);
-        const destination = path.join(projectRoot, file);
-
-        await copyFileOrDirectory(source, destination);
-        console.log(`Copied ${file} to project root`);
-    }
-
-    console.log('All files copied successfully!');
-} catch (error) {
-    console.error('Error copying files:', error);
-    process.exit(1);
 }
+
+main().catch(error => {
+    console.error('Unhandled error:', error);
+    process.exit(1);
+});
