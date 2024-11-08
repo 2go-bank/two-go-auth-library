@@ -1,9 +1,8 @@
 import '@testing-library/jest-dom';
-import { vi } from 'vitest';
 
 declare global {
   // eslint-disable-next-line no-var
-  var vi: any;
+  var jest: typeof jest;
   interface Window {
     env?: {
       VITE_RECAPTCHA_SITE_KEY?: string;
@@ -27,8 +26,5 @@ declare global {
     }
   }
 };
-
-// Make vi available globally for all tests
-(global as any).vi = vi;
 
 export {};

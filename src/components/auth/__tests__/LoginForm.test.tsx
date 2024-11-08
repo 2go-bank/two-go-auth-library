@@ -1,9 +1,8 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { vi } from 'vitest';
 import LoginForm from '../LoginForm';
 
 // Mock environment variables
-vi.mock('@/config/env', () => ({
+jest.mock('@/config/env', () => ({
   default: {
     VITE_RECAPTCHA_SITE_KEY: 'test-key'
   }

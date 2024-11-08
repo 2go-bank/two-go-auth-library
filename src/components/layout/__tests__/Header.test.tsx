@@ -1,23 +1,22 @@
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import { vi } from 'vitest';
 import Header from '../Header';
 import * as auth from '@/utils/auth';
 
 // Mock environment variables
-vi.mock('@/config/env', () => ({
+jest.mock('@/config/env', () => ({
   default: {
     VITE_LOGO_URL: 'test-logo-url'
   }
 }));
 
-vi.mock('@/utils/auth', () => ({
-  isAuthenticated: vi.fn()
+jest.mock('@/utils/auth', () => ({
+  isAuthenticated: jest.fn()
 }));
 
 describe('Header', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    jest.clearAllMocks();
   });
 
   it('renders logo and login link when not authenticated', () => {
