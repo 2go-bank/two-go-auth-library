@@ -22,4 +22,4 @@ const config = {
   coverageReporters: ['lcov', 'text-summary'],
 };
 
-module.exports = config;
+export default config;
