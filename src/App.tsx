@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, HashRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { store } from './store/store';
@@ -75,6 +75,11 @@ const MainLayout = () => (
   </div>
 );
 
+const Router = ({ children }: { children: React.ReactNode }) => {
+  const isPreview = window.location.hostname.includes('preview--');
+  return isPreview ? <HashRouter>{children}</HashRouter> : <BrowserRouter>{children}</BrowserRouter>;
+};
+
 const App = () => {
   useEffect(() => {
     initializeConfigs();
@@ -83,13 +88,13 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <Provider store={store}>
-        <BrowserRouter>
+        <Router>
           <Routes>
             <Route path="/*" element={<AuthLayout />} />
             <Route path="/app/*" element={<MainLayout />} />
           </Routes>
           <Toaster />
-        </BrowserRouter>
+        </Router>
       </Provider>
     </QueryClientProvider>
   );
