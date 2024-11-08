@@ -11,7 +11,7 @@ beforeAll(() => {
 });
 
 // Mock import.meta.env
-vi.mock('@/utils/auth', () => ({
+jest.mock('@/utils/auth', () => ({
   isAuthenticated: jest.fn()
 }));
 
@@ -24,7 +24,10 @@ const mockEnv = {
 
 // Mock import.meta.env before tests
 beforeAll(() => {
-  vi.stubGlobal('import', { meta: { env: mockEnv } });
+  Object.defineProperty(window, 'import', {
+    value: { meta: { env: mockEnv } },
+    writable: true
+  });
 });
 
 describe('Header', () => {

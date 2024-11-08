@@ -12,7 +12,6 @@ declare global {
   }
 }
 
-// Mock Vite's import.meta.env
 const mockImportMeta = {
   env: {
     VITE_LOGO_URL: 'test-logo-url',
@@ -25,7 +24,9 @@ const mockImportMeta = {
   }
 };
 
-// @ts-ignore
-global.import = { meta: mockImportMeta };
+Object.defineProperty(window, 'import', {
+  value: { meta: mockImportMeta },
+  writable: true
+});
 
 export {};
