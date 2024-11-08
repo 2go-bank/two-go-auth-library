@@ -1,13 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import LoginForm from '../LoginForm';
 
-// Mock environment variables
-jest.mock('@/config/env', () => ({
-  default: {
-    VITE_RECAPTCHA_SITE_KEY: 'test-key'
-  }
-}));
-
 describe('LoginForm', () => {
   const mockOnSubmit = jest.fn();
 
