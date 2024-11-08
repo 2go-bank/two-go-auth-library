@@ -18,15 +18,14 @@ export default defineConfig({
             input: {
                 main: resolve(__dirname, 'index.html'),
             },
-            external: ['react', 'react-dom', 'firebase/app', 'firebase/messaging', 'react-google-recaptcha'],
+            external: ['react', 'react-dom'],
             output: {
                 globals: {
-                    react: 'React',
-                    'react-dom': 'ReactDOM',
-                    'firebase/app': 'firebase',
-                    'firebase/messaging': 'firebaseMessaging',
-                    'react-google-recaptcha': 'ReCAPTCHA'
-                }
+                    'react': 'React',
+                    'react-dom': 'ReactDOM'
+                },
+                format: 'umd',
+                name: '2go-base-auth'
             }
         },
         copyPublicDir: true,
@@ -37,12 +36,10 @@ export default defineConfig({
         }
     },
     define: {
-        // Define as variáveis globalmente
         'process.env': envVars,
         'process': {
             env: envVars
         },
-        // Garante que process.env está disponível globalmente
         'global.process.env': envVars,
         'window.process.env': envVars
     }
