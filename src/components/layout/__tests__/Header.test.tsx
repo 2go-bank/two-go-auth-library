@@ -3,14 +3,7 @@ import { BrowserRouter } from 'react-router-dom';
 import Header from '../Header';
 import * as auth from '@/utils/auth';
 
-// Mock the window.env
-beforeAll(() => {
-  window.env = {
-    VITE_LOGO_URL: 'test-logo-url'
-  };
-});
-
-// Mock auth utilities
+// Mock the auth utilities
 jest.mock('@/utils/auth', () => ({
   isAuthenticated: jest.fn()
 }));
@@ -22,8 +15,9 @@ const mockEnv = {
   VITE_LOGO_URL: 'test-logo-url'
 };
 
-// Mock import.meta.env before tests
+// Set environment variables before tests
 beforeAll(() => {
+  window.env = mockEnv;
   process.env = { ...process.env, ...mockEnv };
 });
 
