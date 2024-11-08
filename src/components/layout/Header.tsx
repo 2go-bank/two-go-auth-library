@@ -9,41 +9,19 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-type EnvVars = {
-  VITE_LOGO_URL?: string;
-  VITE_HEADER_BG_COLOR?: string;
-  VITE_HEADER_TEXT_COLOR?: string;
-  VITE_HEADER_LINK_COLOR?: string;
-  [key: string]: string | undefined;
-};
-
 const getEnvVar = (key: string): string => {
-  if (typeof window !== 'undefined') {
-    const windowEnv = (window.env || {}) as EnvVars;
-    return windowEnv[key] || (import.meta.env[key] as string) || '';
+  if (typeof window !== 'undefined' && window.env) {
+    return window.env[key] || import.meta.env[key] || '';
   }
-  return process.env[key] || '';
+  return import.meta.env[key] || '';
 };
 
-const Header = () => {
+const NavigationLinks = ({ onClose }: { onClose?: () => void }) => {
   const isUserAuthenticated = isAuthenticated();
-  const headerBgColor = getEnvVar('VITE_HEADER_BG_COLOR') || '#000000';
-  const headerTextColor = getEnvVar('VITE_HEADER_TEXT_COLOR') || '#EFB207';
   const headerLinkColor = getEnvVar('VITE_HEADER_LINK_COLOR') || '#EFB207';
-  const [logoUrl, setLogoUrl] = useState(getEnvVar('VITE_LOGO_URL'));
-  const [isOpen, setIsOpen] = useState(false);
 
-  useEffect(() => {
-    const handleEnvUpdate = () => {
-      setLogoUrl(getEnvVar('VITE_LOGO_URL'));
-    };
-
-    window.addEventListener('env-updated', handleEnvUpdate);
-    return () => window.removeEventListener('env-updated', handleEnvUpdate);
-  }, []);
-
-  const NavigationLinks = () => (
-    <ul className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-6" style={{ color: headerTextColor }}>
+  return (
+    <ul className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-6">
       {isUserAuthenticated ? (
         <>
           <li>
@@ -51,7 +29,7 @@ const Header = () => {
               to="/app" 
               style={{ color: headerLinkColor }}
               className="hover:opacity-80 transition-colors"
-              onClick={() => setIsOpen(false)}
+              onClick={onClose}
             >
               Home
             </Link>
@@ -61,7 +39,7 @@ const Header = () => {
               to="/app/stats" 
               style={{ color: headerLinkColor }}
               className="hover:opacity-80 transition-colors"
-              onClick={() => setIsOpen(false)}
+              onClick={onClose}
             >
               Stats
             </Link>
@@ -71,7 +49,7 @@ const Header = () => {
               to="/app/plans" 
               style={{ color: headerLinkColor }}
               className="hover:opacity-80 transition-colors"
-              onClick={() => setIsOpen(false)}
+              onClick={onClose}
             >
               Planos
             </Link>
@@ -83,7 +61,7 @@ const Header = () => {
             to="/login" 
             style={{ color: headerLinkColor }}
             className="hover:opacity-80 transition-colors"
-            onClick={() => setIsOpen(false)}
+            onClick={onClose}
           >
             Login
           </Link>
@@ -91,6 +69,22 @@ const Header = () => {
       )}
     </ul>
   );
+};
+
+const Header = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [logoUrl, setLogoUrl] = useState(getEnvVar('VITE_LOGO_URL'));
+  const headerBgColor = getEnvVar('VITE_HEADER_BG_COLOR') || '#000000';
+  const headerLinkColor = getEnvVar('VITE_HEADER_LINK_COLOR') || '#EFB207';
+
+  useEffect(() => {
+    const handleEnvUpdate = () => {
+      setLogoUrl(getEnvVar('VITE_LOGO_URL'));
+    };
+
+    window.addEventListener('env-updated', handleEnvUpdate);
+    return () => window.removeEventListener('env-updated', handleEnvUpdate);
+  }, []);
 
   return (
     <header 
@@ -120,12 +114,12 @@ const Header = () => {
             </SheetTrigger>
             <SheetContent side="right" className="w-[80vw] pt-12" style={{ backgroundColor: headerBgColor }}>
               <nav className="flex flex-col space-y-4">
-                <NavigationLinks />
+                <NavigationLinks onClose={() => setIsOpen(false)} />
               </nav>
             </SheetContent>
           </Sheet>
 
-          {isUserAuthenticated && <UserProfileWidget />}
+          {isAuthenticated() && <UserProfileWidget />}
         </div>
       </div>
     </header>
