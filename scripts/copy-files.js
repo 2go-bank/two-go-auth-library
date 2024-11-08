@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 const fs = require('fs');
 const path = require('path');
-const { fileURLToPath } = require('url');
 const { glob } = require('glob');
 
 // Only run if this is being executed as an installed package
