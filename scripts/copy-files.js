@@ -3,13 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const { glob } = require('glob');
 
-// Only run if this is being executed as an installed package
-const isPackage = process.env.INIT_CWD && process.env.INIT_CWD !== process.cwd();
-
-if (!isPackage) {
-    console.log('Skipping copy files script - running in development mode');
-    process.exit(0);
-}
+const projectRoot = process.cwd();
 
 const filesToCopy = [
     'public',
@@ -52,27 +46,14 @@ async function copyFileOrDirectory(source, destination) {
 
 async function main() {
     try {
-        // Get the project root directory
-        const projectRoot = process.env.INIT_CWD || process.cwd();
-        
-        if (!projectRoot) {
-            console.error('Could not determine project root directory');
-            process.exit(1);
-        }
-
-        // Get the package root directory (where this script is located)
-        const scriptDir = __dirname;
-        const packageRoot = path.resolve(scriptDir, '..');
-
         console.log('Project root:', projectRoot);
-        console.log('Package root:', packageRoot);
 
         for (const file of filesToCopy) {
-            const source = path.join(packageRoot, file);
-            const destination = path.join(projectRoot, file);
+            const source = path.join(projectRoot, file);
+            const destination = path.join(projectRoot, 'dist', file);
 
             await copyFileOrDirectory(source, destination);
-            console.log(`Copied ${file} to project root`);
+            console.log(`Copied ${file} to dist folder`);
         }
 
         console.log('All files copied successfully!');
