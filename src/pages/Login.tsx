@@ -7,9 +7,11 @@ import { requestNotificationPermission } from '@/config/firebase';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import MicrosoftLogo from '@/components/icons/MicrosoftLogo';
+import { Loader2 } from 'lucide-react';
 
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isMicrosoftLoading, setIsMicrosoftLoading] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
   const { code } = useParams();
@@ -22,7 +24,6 @@ const Login = () => {
 
     window.addEventListener('env-updated', handleEnvUpdate);
     
-    // Se houver um código na URL, processa o login Microsoft
     if (code) {
       handleMicrosoftCallback(code);
     }
@@ -36,7 +37,18 @@ const Login = () => {
   };
 
   const handleMicrosoftLogin = () => {
-    window.location.href = 'http://api.2gopag.com/v3/api/microsoft/auth/1';
+    setIsMicrosoftLoading(true);
+    try {
+      window.location.href = 'http://api.2gopag.com/v3/api/microsoft/auth/1';
+    } catch (error) {
+      setIsMicrosoftLoading(false);
+      toast({
+        variant: "destructive",
+        title: "Erro ao redirecionar",
+        description: "Não foi possível iniciar o login com Microsoft. Tente novamente.",
+        className: "bg-red-600 text-white border-none"
+      });
+    }
   };
 
   const handleMicrosoftCallback = async (authCode: string) => {
@@ -146,11 +158,21 @@ const Login = () => {
 
         <Button 
           variant="outline" 
-          className="w-full h-12 flex items-center justify-center gap-3 text-white bg-[#2F2F2F] hover:bg-[#404040] border-none transition-colors"
+          className="w-full h-12 flex items-center justify-center gap-3 text-white bg-[#2F2F2F] hover:bg-[#404040] border-none transition-colors disabled:opacity-70"
           onClick={handleMicrosoftLogin}
+          disabled={isMicrosoftLoading}
         >
-          <MicrosoftLogo />
-          <span>Entrar com Microsoft</span>
+          {isMicrosoftLoading ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" />
+              <span>Redirecionando...</span>
+            </>
+          ) : (
+            <>
+              <MicrosoftLogo />
+              <span>Entrar com Microsoft</span>
+            </>
+          )}
         </Button>
       </div>
     </div>
