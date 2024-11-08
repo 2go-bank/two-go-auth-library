@@ -19,6 +19,9 @@ export default defineConfig({
         },
         rollupOptions: {
             external: ['react', 'react-dom', 'firebase/app', 'firebase/messaging', 'react-google-recaptcha'],
+            input: {
+                main: resolve(__dirname, 'index.html'),
+            },
             output: {
                 globals: {
                     react: 'React',
