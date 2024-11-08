@@ -9,7 +9,6 @@ import { Toaster } from '@/components/ui';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import { initializeConfigs } from './utils/colorConfig';
 
-// Lazy loaded components
 const Login = React.lazy(() => import('./pages/Login'));
 const Register = React.lazy(() => import('./pages/Register'));
 const ForgotPassword = React.lazy(() => import('./pages/ForgotPassword'));
@@ -77,9 +76,6 @@ const MainLayout = () => (
 );
 
 const App = () => {
-  const isPreview = window.location.hostname.includes('preview--');
-  const basename = isPreview ? '/preview/' : '/';
-
   useEffect(() => {
     initializeConfigs();
   }, []);
@@ -87,7 +83,7 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <Provider store={store}>
-        <BrowserRouter basename={basename}>
+        <BrowserRouter>
           <Routes>
             <Route path="/*" element={<AuthLayout />} />
             <Route path="/app/*" element={<MainLayout />} />
