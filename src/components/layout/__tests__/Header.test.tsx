@@ -3,12 +3,12 @@ import { BrowserRouter } from 'react-router-dom';
 import Header from '../Header';
 import * as auth from '@/utils/auth';
 
-// Mock environment variables
-jest.mock('@/config/env', () => ({
-  default: {
+// Mock the window.env
+beforeAll(() => {
+  window.env = {
     VITE_LOGO_URL: 'test-logo-url'
-  }
-}));
+  };
+});
 
 jest.mock('@/utils/auth', () => ({
   isAuthenticated: jest.fn()

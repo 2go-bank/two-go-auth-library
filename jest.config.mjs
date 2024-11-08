@@ -21,5 +21,6 @@ export default {
   coverageReporters: ['lcov', 'text-summary'],
   testEnvironmentOptions: {
     customExportConditions: ['node', 'node-addons'],
-  }
+  },
+  moduleDirectories: ['node_modules', 'src']
 };
