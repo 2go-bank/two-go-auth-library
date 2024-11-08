@@ -15,10 +15,18 @@ const messaging = getMessaging(app);
 
 export const requestNotificationPermission = async () => {
   try {
+    if (!('Notification' in window)) {
+      console.log('This browser does not support notifications');
+      return;
+    }
+
     const permission = await Notification.requestPermission();
     if (permission === 'granted') {
+      const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+      
       const token = await getToken(messaging, {
-        vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY
+        vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
+        serviceWorkerRegistration: registration
       });
       
       if (token) {
