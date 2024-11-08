@@ -1,46 +1,49 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import { resolve } from 'path'
-
-// Carrega todas as variáveis de ambiente do arquivo .env
-const envVars = {
-    VITE_AUTH_API_URL: process.env.VITE_AUTH_API_URL || 'https://api.2gopag.com/access/auth',
-    VITE_API_BASE_URL: process.env.VITE_API_BASE_URL || 'https://api.2gopag.com',
-    VITE_ENVIRONMENT: process.env.VITE_ENVIRONMENT || 'production',
-    VITE_LOGO_URL: process.env.VITE_LOGO_URL || 'https://2gobank.com.br/wp-content/uploads/2023/05/logo-2go-bank.png'
-}
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { VitePWA } from 'vite-plugin-pwa';
+import dts from 'vite-plugin-dts';
+import path from 'path';
 
 export default defineConfig({
-    plugins: [react()],
-    build: {
-        outDir: 'dist',
-        rollupOptions: {
-            input: {
-                main: resolve(__dirname, 'index.html'),
-            },
-            external: ['react', 'react-dom'],
-            output: {
-                globals: {
-                    'react': 'React',
-                    'react-dom': 'ReactDOM'
-                },
-                format: 'umd',
-                name: '2go-base-auth'
+    plugins: [
+        react(),
+        dts({
+            insertTypesEntry: true,
+        }),
+        VitePWA({
+            registerType: 'autoUpdate',
+            includeAssets: ['favicon.png', 'apple-touch-icon.png', 'masked-icon.svg'],
+            manifest: {
+                name: '2GO Base Auth',
+                short_name: '2GO Auth',
+                description: 'Sistema de autenticação do 2GO Bank',
+                theme_color: '#000000',
+                background_color: '#ffffff',
+                display: 'standalone',
+                icons: [
+                    {
+                        src: 'pwa-192x192.png',
+                        sizes: '192x192',
+                        type: 'image/png'
+                    },
+                    {
+                        src: 'pwa-512x512.png',
+                        sizes: '512x512',
+                        type: 'image/png'
+                    },
+                    {
+                        src: 'pwa-512x512.png',
+                        sizes: '512x512',
+                        type: 'image/png',
+                        purpose: 'any maskable'
+                    }
+                ]
             }
-        },
-        copyPublicDir: true,
-    },
+        })
+    ],
     resolve: {
         alias: {
-            '@': resolve(__dirname, 'src')
-        }
-    },
-    define: {
-        'process.env': envVars,
-        'process': {
-            env: envVars
+            '@': path.resolve(__dirname, './src'),
         },
-        'global.process.env': envVars,
-        'window.process.env': envVars
-    }
-})
+    },
+});
