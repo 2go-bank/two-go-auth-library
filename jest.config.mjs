@@ -6,13 +6,7 @@ export default {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
   },
   transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest', { 
-      presets: [
-        ['@babel/preset-env', { targets: { node: 'current' } }],
-        '@babel/preset-typescript',
-        ['@babel/preset-react', { runtime: 'automatic' }]
-      ]
-    }]
+    '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
   },
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
   testPathIgnorePatterns: ['/node_modules/', '/dist/'],
@@ -30,6 +24,6 @@ export default {
   },
   moduleDirectories: ['node_modules', 'src'],
   transformIgnorePatterns: [
-    '/node_modules/(?!(@testing-library|@babel)/)'
-  ]
+    '/node_modules/(?!(@testing-library|@babel)/)',
+  ],
 };
