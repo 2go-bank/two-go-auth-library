@@ -3,23 +3,10 @@ import { BrowserRouter } from 'react-router-dom';
 import Header from '../Header';
 import * as auth from '@/utils/auth';
 
-// Mock the auth utilities
+// Mock do módulo de autenticação
 jest.mock('@/utils/auth', () => ({
   isAuthenticated: jest.fn()
 }));
-
-const mockEnv = {
-  VITE_HEADER_BG_COLOR: '#000000',
-  VITE_HEADER_TEXT_COLOR: '#EFB207',
-  VITE_HEADER_LINK_COLOR: '#EFB207',
-  VITE_LOGO_URL: 'test-logo-url'
-};
-
-// Set environment variables before tests
-beforeAll(() => {
-  window.env = mockEnv;
-  process.env = { ...process.env, ...mockEnv };
-});
 
 describe('Header', () => {
   beforeEach(() => {
