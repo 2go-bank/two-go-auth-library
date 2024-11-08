@@ -4,6 +4,14 @@ const path = require('path');
 const { fileURLToPath } = require('url');
 const { glob } = require('glob');
 
+// Only run if this is being executed as an installed package
+const isPackage = process.env.INIT_CWD && process.env.INIT_CWD !== process.cwd();
+
+if (!isPackage) {
+    console.log('Skipping copy files script - running in development mode');
+    process.exit(0);
+}
+
 const filesToCopy = [
     'public',
     'src',
