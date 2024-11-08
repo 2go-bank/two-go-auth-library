@@ -10,7 +10,7 @@ beforeAll(() => {
   };
 });
 
-// Mock import.meta.env
+// Mock auth utilities
 jest.mock('@/utils/auth', () => ({
   isAuthenticated: jest.fn()
 }));
@@ -24,10 +24,7 @@ const mockEnv = {
 
 // Mock import.meta.env before tests
 beforeAll(() => {
-  Object.defineProperty(window, 'import', {
-    value: { meta: { env: mockEnv } },
-    writable: true
-  });
+  process.env = { ...process.env, ...mockEnv };
 });
 
 describe('Header', () => {

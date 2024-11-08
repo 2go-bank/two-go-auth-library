@@ -31,5 +31,15 @@ export default {
   moduleDirectories: ['node_modules', 'src'],
   transformIgnorePatterns: [
     '/node_modules/(?!(@testing-library|@babel)/)'
-  ]
+  ],
+  globals: {
+    'import.meta': {
+      env: {
+        VITE_HEADER_BG_COLOR: '#000000',
+        VITE_HEADER_TEXT_COLOR: '#EFB207',
+        VITE_HEADER_LINK_COLOR: '#EFB207',
+        VITE_LOGO_URL: 'test-logo-url'
+      }
+    }
+  }
 };
