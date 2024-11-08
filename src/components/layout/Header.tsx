@@ -9,17 +9,24 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
+const getEnvVar = (key: string) => {
+  if (process.env.NODE_ENV === 'test') {
+    return process.env[key];
+  }
+  return (window as any).env?.[key] || import.meta.env[key];
+};
+
 const Header = () => {
   const isUserAuthenticated = isAuthenticated();
-  const headerBgColor = import.meta.env.VITE_HEADER_BG_COLOR || '#000000';
-  const headerTextColor = import.meta.env.VITE_HEADER_TEXT_COLOR || '#EFB207';
-  const headerLinkColor = import.meta.env.VITE_HEADER_LINK_COLOR || '#EFB207';
-  const [logoUrl, setLogoUrl] = useState((window as any).env?.VITE_LOGO_URL || import.meta.env.VITE_LOGO_URL);
+  const headerBgColor = getEnvVar('VITE_HEADER_BG_COLOR') || '#000000';
+  const headerTextColor = getEnvVar('VITE_HEADER_TEXT_COLOR') || '#EFB207';
+  const headerLinkColor = getEnvVar('VITE_HEADER_LINK_COLOR') || '#EFB207';
+  const [logoUrl, setLogoUrl] = useState(getEnvVar('VITE_LOGO_URL'));
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     const handleEnvUpdate = () => {
-      setLogoUrl((window as any).env?.VITE_LOGO_URL || import.meta.env.VITE_LOGO_URL);
+      setLogoUrl(getEnvVar('VITE_LOGO_URL'));
     };
 
     window.addEventListener('env-updated', handleEnvUpdate);
@@ -94,7 +101,6 @@ const Header = () => {
             <NavigationLinks />
           </nav>
           
-          {/* Mobile Menu */}
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger className="md:hidden" aria-label="Menu">
               {isOpen ? (

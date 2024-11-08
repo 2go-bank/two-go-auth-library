@@ -1,6 +1,5 @@
 import '@testing-library/jest-dom';
 
-// Extend the NodeJS global type to include Jest
 declare global {
   interface Window {
     env?: {
