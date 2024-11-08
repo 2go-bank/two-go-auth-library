@@ -11,16 +11,6 @@ const mockEnv = {
   VITE_HEADER_LINK_COLOR: '#EFB207'
 };
 
-// Define import.meta.env para testes
-global.import = {
-  meta: {
-    env: mockEnv
-  }
-} as any;
-
-// Define window.env para testes
-window.env = mockEnv;
-
 // Define tipos globais
 declare global {
   interface Window {
@@ -36,15 +26,17 @@ declare global {
     }
   }
 
-  namespace NodeJS {
-    interface Global {
-      import: {
-        meta: {
-          env: typeof mockEnv;
-        };
-      };
-    }
-  }
+  var importMeta: {
+    env: typeof mockEnv;
+  };
 }
+
+// Define import.meta.env para testes
+globalThis.importMeta = {
+  env: mockEnv
+};
+
+// Define window.env para testes
+window.env = mockEnv;
 
 export {};
