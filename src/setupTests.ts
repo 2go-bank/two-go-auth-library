@@ -1,9 +1,9 @@
 import '@testing-library/jest-dom';
-import { vi, type Vi } from 'vitest';
+import { vi } from 'vitest';
 
 declare global {
-  // Use Vi type from vitest instead of referencing vi directly
-  var vi: Vi;
+  // Declare vi globally using its inferred type
+  var vi: typeof vi;
   interface Window {
     env?: {
       VITE_RECAPTCHA_SITE_KEY?: string;
