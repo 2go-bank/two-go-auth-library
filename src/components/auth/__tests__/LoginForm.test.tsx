@@ -1,6 +1,11 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import LoginForm from '../LoginForm';
 
+// Mock Vite's import.meta.env
+vi.mock('../../config/env', () => ({
+  VITE_RECAPTCHA_SITE_KEY: 'test-key'
+}));
+
 describe('LoginForm', () => {
   const mockOnSubmit = jest.fn();
 

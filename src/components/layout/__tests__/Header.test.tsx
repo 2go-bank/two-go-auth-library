@@ -3,6 +3,11 @@ import { BrowserRouter } from 'react-router-dom';
 import Header from '../Header';
 import * as auth from '@/utils/auth';
 
+// Mock Vite's import.meta.env
+vi.mock('../../config/env', () => ({
+  VITE_LOGO_URL: 'test-logo-url'
+}));
+
 jest.mock('@/utils/auth', () => ({
   isAuthenticated: jest.fn()
 }));
