@@ -16,7 +16,8 @@ const filesToCopy = [
     'tailwind.config.ts',
     'tsconfig.app.json',
     'tsconfig.json',
-    'vite.config.ts'
+    'vite.config.ts',
+    '.env'
 ];
 
 function copyFileOrDirectory(source, destination) {
