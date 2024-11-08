@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 const fs = require('fs');
 const path = require('path');
-const { fileURLToPath } = require('url');
 const { glob } = require('glob');
+
+const projectRoot = process.cwd();
 
 const filesToCopy = [
     'public',
@@ -20,42 +21,39 @@ const filesToCopy = [
 ];
 
 async function copyFileOrDirectory(source, destination) {
-    if (fs.existsSync(source)) {
-        if (fs.lstatSync(source).isDirectory()) {
-            if (!fs.existsSync(destination)) {
-                fs.mkdirSync(destination, { recursive: true });
-            }
+    try {
+        if (fs.existsSync(source)) {
+            if (fs.lstatSync(source).isDirectory()) {
+                if (!fs.existsSync(destination)) {
+                    fs.mkdirSync(destination, { recursive: true });
+                }
 
-            const files = fs.readdirSync(source);
-            for (const file of files) {
-                const sourcePath = path.join(source, file);
-                const destPath = path.join(destination, file);
-                await copyFileOrDirectory(sourcePath, destPath);
+                const files = fs.readdirSync(source);
+                for (const file of files) {
+                    const sourcePath = path.join(source, file);
+                    const destPath = path.join(destination, file);
+                    await copyFileOrDirectory(sourcePath, destPath);
+                }
+            } else {
+                fs.copyFileSync(source, destination);
             }
-        } else {
-            fs.copyFileSync(source, destination);
         }
+    } catch (error) {
+        console.error(`Error copying ${source} to ${destination}:`, error);
+        throw error;
     }
 }
 
 async function main() {
     try {
-        const projectRoot = process.env.INIT_CWD || process.cwd();
-
-        if (!projectRoot) {
-            console.error('Could not determine project root directory');
-            process.exit(1);
-        }
-
-        const __dirname = path.dirname(__filename);
-        const packageRoot = path.resolve(__dirname, '..');
+        console.log('Project root:', projectRoot);
 
         for (const file of filesToCopy) {
-            const source = path.join(packageRoot, file);
-            const destination = path.join(projectRoot, file);
+            const source = path.join(projectRoot, file);
+            const destination = path.join(projectRoot, 'dist', file);
 
             await copyFileOrDirectory(source, destination);
-            console.log(`Copied ${file} to project root`);
+            console.log(`Copied ${file} to dist folder`);
         }
 
         console.log('All files copied successfully!');
