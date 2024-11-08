@@ -52,7 +52,6 @@ describe('LoginForm', () => {
 
   test('requires username and password fields', () => {
     render(<LoginForm onSubmit={mockOnSubmit} isLoading={false} />);
-    const submitButton = screen.getByRole('button', { name: /entrar/i });
     const usernameInput = screen.getByLabelText(/usuário/i);
     const passwordInput = screen.getByLabelText(/senha/i);
 
