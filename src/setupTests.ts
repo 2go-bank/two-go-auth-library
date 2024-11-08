@@ -7,6 +7,10 @@ declare global {
       VITE_AUTH_API_URL?: string;
       VITE_API_BASE_URL?: string;
       VITE_ENVIRONMENT?: string;
+      VITE_HEADER_BG_COLOR?: string;
+      VITE_HEADER_TEXT_COLOR?: string;
+      VITE_HEADER_LINK_COLOR?: string;
+      [key: string]: string | undefined;
     }
   }
 }

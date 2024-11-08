@@ -9,11 +9,20 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-const getEnvVar = (key: string) => {
+type EnvVars = {
+  VITE_LOGO_URL?: string;
+  VITE_HEADER_BG_COLOR?: string;
+  VITE_HEADER_TEXT_COLOR?: string;
+  VITE_HEADER_LINK_COLOR?: string;
+  [key: string]: string | undefined;
+};
+
+const getEnvVar = (key: string): string => {
   if (typeof window !== 'undefined') {
-    return window.env?.[key] || import.meta.env[key];
+    const windowEnv = (window.env || {}) as EnvVars;
+    return windowEnv[key] || (import.meta.env[key] as string) || '';
   }
-  return process.env[key];
+  return process.env[key] || '';
 };
 
 const Header = () => {
