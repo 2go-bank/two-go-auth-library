@@ -1,5 +1,9 @@
 export { default as App } from './App';
 export { default as LoginForm } from './components/auth/LoginForm';
+export { default as LoginHeader } from './components/auth/LoginHeader';
+export { default as LoginFooter } from './components/auth/LoginFooter';
+export { default as LoginContainer } from './components/auth/LoginContainer';
+export { default as LoginDivider } from './components/auth/LoginDivider';
 export { default as ProtectedRoute } from './components/auth/ProtectedRoute';
 export { default as Header } from './components/layout/Header';
 export { default as Footer } from './components/layout/Footer';
