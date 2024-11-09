@@ -75,23 +75,37 @@ const MainLayout = () => (
   </div>
 );
 
-const App = () => {
+interface AppProps {
+  skipRouter?: boolean;
+}
+
+const AppContent = () => {
   useEffect(() => {
     initializeConfigs();
   }, []);
 
+  return (
+    <Routes>
+      <Route path="/*" element={<AuthLayout />} />
+      <Route path="/app/*" element={<MainLayout />} />
+    </Routes>
+  );
+};
+
+const App = ({ skipRouter = false }: AppProps) => {
   const RouterComponent = window.location.hostname.includes('preview--') ? HashRouter : BrowserRouter;
 
   return (
     <QueryClientProvider client={queryClient}>
       <Provider store={store}>
-        <RouterComponent>
-          <Routes>
-            <Route path="/*" element={<AuthLayout />} />
-            <Route path="/app/*" element={<MainLayout />} />
-          </Routes>
-          <Toaster />
-        </RouterComponent>
+        {skipRouter ? (
+          <AppContent />
+        ) : (
+          <RouterComponent>
+            <AppContent />
+          </RouterComponent>
+        )}
+        <Toaster />
       </Provider>
     </QueryClientProvider>
   );
