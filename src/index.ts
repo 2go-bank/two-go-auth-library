@@ -1,4 +1,5 @@
 export { default as App } from './App';
+export { default as BaseApp } from './App';
 export { default as LoginForm } from './components/auth/LoginForm';
 export { default as LoginHeader } from './components/auth/LoginHeader';
 export { default as LoginFooter } from './components/auth/LoginFooter';
