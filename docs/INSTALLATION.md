@@ -14,15 +14,64 @@ Configure as variáveis de ambiente necessárias para o projeto @tg-devs/auth-sk
 
 3. Configure o router:
 ```
-Configure o router do projeto para usar o BaseApp do @tg-devs/auth-skeleton como componente principal
+// No seu App.tsx ou componente principal
+import { BrowserRouter } from 'react-router-dom';
+import { BaseApp } from '@tg-devs/auth-skeleton';
+
+const App = () => {
+  return (
+    <BrowserRouter>
+      <BaseApp skipRouter={true} />
+    </BrowserRouter>
+  );
+};
 ```
 
 4. Configure o Redux store:
 ```
-Configure o Redux store do projeto para estender o store base do @tg-devs/auth-skeleton
+// No seu store.ts
+import { configureStore } from '@reduxjs/toolkit';
+import { authReducer } from '@tg-devs/auth-skeleton';
+
+export const store = configureStore({
+  reducer: {
+    auth: authReducer,
+    // ... seus outros reducers
+  },
+});
 ```
 
-5. Customize os temas:
+5. Configure os temas:
 ```
-Configure os temas e cores do projeto usando as variáveis do @tg-devs/auth-skeleton
+// No seu .env
+VITE_BODY_BG_COLOR="#FFFFFF"
+VITE_BODY_TEXT_COLOR="#000000"
+VITE_BODY_LINK_COLOR="#EFB207"
+VITE_HEADER_BG_COLOR="#000000"
+VITE_HEADER_TEXT_COLOR="#EFB207"
+VITE_HEADER_LINK_COLOR="#EFB207"
+VITE_FOOTER_BG_COLOR="#000000"
+VITE_FOOTER_TEXT_COLOR="#EFB207"
+VITE_FOOTER_LINK_COLOR="#EFB207"
+```
+
+6. Importante: Configuração do Router
+Para evitar o erro de múltiplos Routers, sempre use o `skipRouter={true}` quando estiver usando o BaseApp dentro do seu próprio Router:
+
+```typescript
+// Correto
+<BrowserRouter>
+  <BaseApp skipRouter={true} />
+</BrowserRouter>
+
+// Incorreto - Causará erro
+<BrowserRouter>
+  <BaseApp /> {/* Não passar skipRouter causará erro de Router dentro de Router */}
+</BrowserRouter>
+```
+
+7. Configuração das URLs da API:
+```
+VITE_AUTH_API_URL=https://sua-api.com/auth
+VITE_API_BASE_URL=https://sua-api.com
 ```
