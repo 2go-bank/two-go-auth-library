@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useToast } from "@/hooks/use-toast";
-import LoginForm from '@/components/auth/LoginForm';
+import { LoginForm, Header, Footer } from '@tg-devs/auth-skeleton';
 import CryptoJS from 'crypto-js';
 import { requestNotificationPermission } from '@/config/firebase';
 import { Button } from '@/components/ui/button';
