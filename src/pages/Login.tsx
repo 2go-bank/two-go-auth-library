@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useToast } from "@/hooks/use-toast";
-import { LoginForm, Header, Footer } from '@tg-devs/auth-skeleton';
+import { LoginForm } from '@/components/auth/LoginForm';
 import CryptoJS from 'crypto-js';
 import { requestNotificationPermission } from '@/config/firebase';
 import { Button } from '@/components/ui/button';
@@ -133,47 +133,49 @@ const Login = () => {
   };
 
   return (
-    <div className="container mx-auto flex flex-col items-center justify-center min-h-[calc(100vh-200px)]">
-      <div className="w-full max-w-md space-y-8 p-8 bg-black rounded-lg shadow-lg">
-        <div className="flex justify-center mb-8">
-          <img 
-            src={logoUrl}
-            alt="2GO Bank Logo" 
-            className="h-12"
-          />
+    <div className="min-h-screen bg-black">
+      <div className="container mx-auto flex flex-col items-center justify-center min-h-[calc(100vh-200px)]">
+        <div className="w-full max-w-md space-y-8 p-8 bg-black rounded-lg shadow-lg">
+          <div className="flex justify-center mb-8">
+            <img 
+              src={logoUrl}
+              alt="2GO Bank Logo" 
+              className="h-12"
+            />
+          </div>
+          
+          <LoginForm onSubmit={handleLogin} isLoading={isLoading} />
+
+          <div className="text-center mt-4 flex justify-between items-center">
+            <Link to="/forgot-password" className="text-[#EFB207] hover:underline">
+              Recuperar senha
+            </Link>
+            <Link to="/register" className="text-[#EFB207] hover:underline">
+              Cadastre-se
+            </Link>
+          </div>
+
+          <Separator className="my-4" />
+
+          <Button 
+            variant="outline" 
+            className="w-full h-12 flex items-center justify-center gap-3 text-white bg-[#2F2F2F] hover:bg-[#404040] border-none transition-colors disabled:opacity-70"
+            onClick={handleMicrosoftLogin}
+            disabled={isMicrosoftLoading}
+          >
+            {isMicrosoftLoading ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span>Redirecionando...</span>
+              </>
+            ) : (
+              <>
+                <MicrosoftLogo />
+                <span>Entrar com Microsoft</span>
+              </>
+            )}
+          </Button>
         </div>
-        
-        <LoginForm onSubmit={handleLogin} isLoading={isLoading} />
-
-        <div className="text-center mt-4 flex justify-between items-center">
-          <Link to="/forgot-password" className="text-[#EFB207] hover:underline">
-            Recuperar senha
-          </Link>
-          <Link to="/register" className="text-[#EFB207] hover:underline">
-            Cadastre-se
-          </Link>
-        </div>
-
-        <Separator className="my-4" />
-
-        <Button 
-          variant="outline" 
-          className="w-full h-12 flex items-center justify-center gap-3 text-white bg-[#2F2F2F] hover:bg-[#404040] border-none transition-colors disabled:opacity-70"
-          onClick={handleMicrosoftLogin}
-          disabled={isMicrosoftLoading}
-        >
-          {isMicrosoftLoading ? (
-            <>
-              <Loader2 className="h-4 w-4 animate-spin" />
-              <span>Redirecionando...</span>
-            </>
-          ) : (
-            <>
-              <MicrosoftLogo />
-              <span>Entrar com Microsoft</span>
-            </>
-          )}
-        </Button>
       </div>
     </div>
   );
