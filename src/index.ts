@@ -1,9 +1,9 @@
-export * from './App';
-export * from './components/auth/LoginForm';
-export * from './components/auth/ProtectedRoute';
-export * from './components/layout/Header';
-export * from './components/layout/Footer';
-export * from './components/layout/UserProfileWidget';
+export { default as App } from './App';
+export { default as LoginForm } from './components/auth/LoginForm';
+export { default as ProtectedRoute } from './components/auth/ProtectedRoute';
+export { default as Header } from './components/layout/Header';
+export { default as Footer } from './components/layout/Footer';
+export { default as UserProfileWidget } from './components/layout/UserProfileWidget';
 export * from './utils/auth';
 export * from './utils/colorConfig';
 export * from './utils/formatters';
