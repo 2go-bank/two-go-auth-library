@@ -13,7 +13,7 @@ export * from './utils/auth';
 export * from './utils/colorConfig';
 export * from './utils/formatters';
 export * from './utils/validations';
-export * from './store/authSlice';
+export { default as authReducer } from './store/authSlice';
 export * from './store/store';
 export * from './types/user';
 export * from './types/colors';
